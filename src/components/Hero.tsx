@@ -37,40 +37,7 @@ export default function Hero() {
       {/* Code Background Restored */}
       <CodeBackground />
 
-      {/* Brand */}
-      <h1
-        style={{
-          position: 'relative',
-          zIndex: 2,
-          fontSize: 'clamp(64px, 7vw, 110px)',
-          fontWeight: 500,
-          letterSpacing: '0.01em',
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '0.02em',
-          textTransform: 'lowercase',
-          opacity,
-          transform: `translateY(-${translate}px)`,
-          transition: 'opacity 0.1s linear',
-        }}
-      >
-        <span
-          style={{
-            color: '#e6f1ee',
-            letterSpacing: '0.12em',
-          }}
-        >
-          olkeri
-        </span>
-        <span
-          style={{
-            color: '#00ff9d',
-            letterSpacing: '0.22em',
-          }}
-        >
-          .space
-        </span>
-      </h1>
+
     </div>
   )
 }
