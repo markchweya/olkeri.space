@@ -1,5 +1,6 @@
 import './globals.css'
 import { Space_Grotesk } from 'next/font/google'
+import ClientLayout from '@/components/ClientLayout'
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -19,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-black">
       <body className={`${spaceGrotesk.className} bg-black text-white min-h-screen antialiased`}>
-        {children}
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   )
