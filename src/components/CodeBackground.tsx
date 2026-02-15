@@ -2,26 +2,20 @@
 
 import { useEffect, useState } from 'react'
 
-const keywords = ['const','let','function','return','async','await','if','while','for']
+const keywords = ['const','let','function','return','async','await']
 const vars = ['system','engine','matrix','api','model','stack','future','agent']
 const methods = ['build','scale','optimize','deploy','generate','train','compile']
 
-function randomItem(arr: string[]) {
+function rand(arr: string[]) {
   return arr[Math.floor(Math.random() * arr.length)]
 }
 
-function generateRandomLine() {
+function generateLine() {
   const pattern = Math.floor(Math.random() * 3)
 
-  if (pattern === 0) {
-    return `${randomItem(keywords)} ${randomItem(vars)} = ${randomItem(methods)}();`
-  }
-
-  if (pattern === 1) {
-    return `${randomItem(vars)}.${randomItem(methods)}(${randomItem(vars)});`
-  }
-
-  return `if (${randomItem(vars)}) { ${randomItem(methods)}(); }`
+  if (pattern === 0) return `${rand(keywords)} ${rand(vars)} = ${rand(methods)}();`
+  if (pattern === 1) return `${rand(vars)}.${rand(methods)}(${rand(vars)});`
+  return `if (${rand(vars)}) { ${rand(methods)}(); }`
 }
 
 type Line = {
@@ -32,23 +26,23 @@ type Line = {
 }
 
 export default function CodeBackground() {
-  const [linesState, setLinesState] = useState<Line[]>([])
+  const [lines, setLines] = useState<Line[]>([])
 
   useEffect(() => {
     let id = 0
 
-    const spawnLine = () => {
-      const newLine: Line = {
-        id: id++,
-        text: generateRandomLine(),
-        top: Math.random() * 90,
-        left: Math.random() * 90,
-      }
+    const interval = setInterval(() => {
+      setLines(prev => [
+        ...prev.slice(-20),
+        {
+          id: id++,
+          text: generateLine(),
+          top: Math.random() * 85,
+          left: Math.random() * 85,
+        }
+      ])
+    }, 900)
 
-      setLinesState(prev => [...prev.slice(-40), newLine])
-    }
-
-    const interval = setInterval(spawnLine, 700)
     return () => clearInterval(interval)
   }, [])
 
@@ -60,63 +54,49 @@ export default function CodeBackground() {
         pointerEvents: 'none',
         fontFamily: 'monospace',
         fontSize: '15px',
-        color: '#00ff99',
+        color: '#00ff9d',
       }}
     >
-      {linesState.map(line => (
-        <AnimatedLine key={line.id} line={line} />
+      {lines.map(line => (
+        <TypingLine key={line.id} line={line} />
       ))}
     </div>
   )
 }
 
-function AnimatedLine({ line }: { line: Line }) {
+function TypingLine({ line }: { line: Line }) {
   const [displayed, setDisplayed] = useState('')
-  const [phase, setPhase] = useState<'typing' | 'pause' | 'deleting'>('typing')
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    let charIndex = 0
+    let i = 0
 
-    const typeInterval = setInterval(() => {
-      if (phase === 'typing') {
-        if (charIndex < line.text.length) {
-          setDisplayed(prev => prev + line.text[charIndex])
-          charIndex++
-        } else {
-          clearInterval(typeInterval)
-          setPhase('pause')
-        }
+    setVisible(true)
+
+    const type = setInterval(() => {
+      if (i < line.text.length) {
+        setDisplayed(prev => prev + line.text[i])
+        i++
+      } else {
+        clearInterval(type)
+
+        setTimeout(() => {
+          const erase = setInterval(() => {
+            setDisplayed(prev => {
+              if (prev.length <= 1) {
+                clearInterval(erase)
+                setVisible(false)
+                return ''
+              }
+              return prev.slice(0, -1)
+            })
+          }, 20)
+        }, 700)
       }
-    }, 25)
+    }, 30)
 
-    return () => clearInterval(typeInterval)
-  }, [line.text, phase])
-
-  useEffect(() => {
-    if (phase !== 'pause') return
-
-    const pauseTimeout = setTimeout(() => {
-      setPhase('deleting')
-    }, 600)
-
-    return () => clearTimeout(pauseTimeout)
-  }, [phase])
-
-  useEffect(() => {
-    if (phase !== 'deleting') return
-
-    const deleteInterval = setInterval(() => {
-      setDisplayed(prev => {
-        if (prev.length <= 1) {
-          clearInterval(deleteInterval)
-          return ''
-        }
-        return prev.slice(0, -1)
-      })
-    }, 15)
-
-    return () => clearInterval(deleteInterval)
-  }, [phase])
+    return () => clearInterval(type)
+  }, [line.text])
 
   return (
     <div
@@ -124,22 +104,13 @@ function AnimatedLine({ line }: { line: Line }) {
         position: 'absolute',
         top: `${line.top}%`,
         left: `${line.left}%`,
-        opacity: 0.7,
         whiteSpace: 'nowrap',
-        animation: 'fade 4s ease-in-out forwards',
+        opacity: visible ? 0.8 : 0,
+        transition: 'opacity 0.8s ease',
       }}
     >
       {displayed}
-      <span style={{ opacity: 0.8 }}>|</span>
-
-      <style jsx>{`
-        @keyframes fade {
-          0% { opacity: 0; }
-          20% { opacity: 0.7; }
-          80% { opacity: 0.7; }
-          100% { opacity: 0; }
-        }
-      `}</style>
+      <span style={{ opacity: 0.7 }}>|</span>
     </div>
   )
 }
