@@ -18,8 +18,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="bg-black">
-      <body className={`${spaceGrotesk.className} bg-black text-white min-h-screen antialiased`}>
+    <html lang="en" className="bg-black" suppressHydrationWarning>
+      <body suppressHydrationWarning className={`${spaceGrotesk.className} bg-black text-white min-h-screen antialiased`}>
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

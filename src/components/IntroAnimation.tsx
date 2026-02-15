@@ -10,11 +10,18 @@ function randomChar() {
 }
 
 export default function IntroAnimation({ onFinish }: { onFinish: () => void }) {
+  const [mounted, setMounted] = useState(false)
   const [progress, setProgress] = useState(0)
   const [display, setDisplay] = useState(FINAL_TEXT.split(''))
   const [done, setDone] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+
     let frame = 0
 
     const interval = setInterval(() => {
@@ -41,34 +48,43 @@ export default function IntroAnimation({ onFinish }: { onFinish: () => void }) {
     }, 35)
 
     return () => clearInterval(interval)
-  }, [progress, onFinish])
+  }, [mounted, progress, onFinish])
+
+  if (!mounted) return null
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-black transition-opacity duration-700 ${
+      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-black px-6 transition-opacity duration-700 ${
         done ? 'opacity-0' : 'opacity-100'
       }`}
     >
-      <div className="text-6xl md:text-8xl font-semibold tracking-tight font-mono">
+      <div
+        className="w-full text-center select-none"
+        style={{
+          fontSize: 'clamp(32px, 8vw, 110px)',
+          lineHeight: 1.1,
+          fontWeight: 500,
+          letterSpacing: '0.02em',
+        }}
+      >
         {display.map((char, i) => {
-          // Gradient blend from white → emerald across eri + spa
           const gradientStart = 3
           const gradientEnd = 8
 
-          let colorClass = 'text-emerald-500/30'
+          let className = 'text-emerald-500/30'
 
           if (i < progress) {
             if (i < gradientStart) {
-              colorClass = 'text-white'
+              className = 'text-white'
             } else if (i >= gradientStart && i <= gradientEnd) {
-              colorClass = 'bg-gradient-to-r from-white via-emerald-300 to-emerald-500 bg-clip-text text-transparent'
+              className = 'bg-gradient-to-r from-white via-emerald-300 to-emerald-500 bg-clip-text text-transparent'
             } else {
-              colorClass = 'text-emerald-400'
+              className = 'text-emerald-400'
             }
           }
 
           return (
-            <span key={i} className={`transition-all duration-500 ${colorClass}`}>
+            <span key={i} className={`transition-all duration-500 ${className}`}>
               {char}
             </span>
           )

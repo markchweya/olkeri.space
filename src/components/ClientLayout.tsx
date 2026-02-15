@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Header from '@/components/Header'
 import IntroAnimation from '@/components/IntroAnimation'
+import CookieConsent from '@/components/CookieConsent'
 
 export default function ClientLayout({
   children,
@@ -16,6 +17,7 @@ export default function ClientLayout({
       {showIntro && <IntroAnimation onFinish={() => setShowIntro(false)} />}
       <Header />
       {!showIntro && children}
+      <CookieConsent />
     </>
   )
 }
