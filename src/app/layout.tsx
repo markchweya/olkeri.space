@@ -8,7 +8,7 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export const metadata = {
-  title: 'Olkeri.space',
+  title: 'olkeri.space',
   description: 'Web development. Systems. AI. Applications.',
 }
 
@@ -18,8 +18,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="bg-black" suppressHydrationWarning>
-      <body suppressHydrationWarning className={`${spaceGrotesk.className} bg-black text-white min-h-screen antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        suppressHydrationWarning
+        className={`${spaceGrotesk.className} text-white min-h-screen antialiased`}
+      >
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
