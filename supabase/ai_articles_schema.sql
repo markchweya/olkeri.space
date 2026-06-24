@@ -7,6 +7,7 @@ create table if not exists ai_articles (
   content text not null,
   language text not null check (language in ('en', 'fr', 'de')),
   image_url text,
+  views integer not null default 0,
   author_id uuid references auth.users(id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
@@ -21,6 +22,9 @@ create index if not exists ai_articles_search_idx
   on ai_articles using gin (
     to_tsvector('simple', coalesce(title, '') || ' ' || coalesce(content, ''))
   );
+
+alter table ai_articles
+  add column if not exists views integer not null default 0;
 
 create or replace function set_ai_articles_updated_at()
 returns trigger as $$
@@ -67,6 +71,22 @@ on ai_articles
 for delete
 to authenticated
 using (auth.uid() = author_id);
+
+create or replace function increment_ai_article_views(article_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  update ai_articles
+  set views = coalesce(views, 0) + 1
+  where id = article_id
+    and published_at is not null;
+end;
+$$;
+
+grant execute on function increment_ai_article_views(uuid) to anon, authenticated;
 
 insert into storage.buckets (
   id,

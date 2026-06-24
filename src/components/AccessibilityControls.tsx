@@ -1,13 +1,18 @@
 'use client'
 
-import Link from 'next/link'
-import { Languages, Moon, Sun } from 'lucide-react'
+import { Moon, Sun } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { articleLanguages } from '@/lib/articles'
+import { articleLanguages, isArticleLanguage, type ArticleLanguage } from '@/lib/articles'
+import { setStoredAppLanguage, useAppLanguage } from '@/lib/use-app-language'
 
 type ThemeMode = 'dark' | 'light'
 
 export default function AccessibilityControls() {
+  const pathname = usePathname()
+  const pathLanguage = pathname.split('/')[1]
+  const fallbackLanguage = isArticleLanguage(pathLanguage) ? pathLanguage : 'en'
+  const appLanguage = useAppLanguage(fallbackLanguage)
   const [theme, setTheme] = useState<ThemeMode>('dark')
 
   useEffect(() => {
@@ -32,6 +37,10 @@ export default function AccessibilityControls() {
     window.localStorage.setItem('olkeri-theme', nextTheme)
   }
 
+  function changeLanguage(language: ArticleLanguage) {
+    setStoredAppLanguage(language)
+  }
+
   return (
     <div
       aria-label="Accessibility controls"
@@ -48,17 +57,20 @@ export default function AccessibilityControls() {
 
       <div className="h-6 w-px bg-white/15" />
 
-      <div className="flex items-center gap-1" aria-label="Language shortcuts">
-        <Languages size={17} className="mx-1 text-green-300" aria-hidden="true" />
+      <div className="flex items-center gap-1" aria-label="Website language">
         {articleLanguages.map(language => (
-          <Link
+          <button
             key={language.code}
-            href={`/${language.code}`}
-            aria-label={`Read ${language.name} articles on olkeri.space`}
-            className="rounded-md px-2.5 py-2 text-xs font-medium uppercase tracking-wide text-white/75 transition-colors hover:bg-white/10 hover:text-green-300"
+            type="button"
+            onClick={() => changeLanguage(language.code)}
+            aria-pressed={appLanguage === language.code}
+            aria-label={`Switch olkeri.space language to ${language.name}`}
+            className={`rounded-md px-2.5 py-2 text-xs font-medium uppercase tracking-wide transition-colors hover:bg-white/10 hover:text-green-300 ${
+              appLanguage === language.code ? 'text-green-300' : 'text-white/75'
+            }`}
           >
             {language.code}
-          </Link>
+          </button>
         ))}
       </div>
     </div>

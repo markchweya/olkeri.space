@@ -5,19 +5,24 @@ import { useEffect, useMemo, useState } from 'react'
 import ArticleFallbackImage from '@/components/ArticleFallbackImage'
 import {
   articleLanguages,
+  appCopy,
   getArticlePath,
+  getArticleLanguageLabel,
   getLanguageName,
   getReadTime,
   type Article,
   type ArticleLanguage,
 } from '@/lib/articles'
 import { getSupabase } from '@/lib/supabase'
+import { useAppLanguage } from '@/lib/use-app-language'
 
 type BlogListingProps = {
   initialLanguage?: ArticleLanguage
 }
 
 export default function BlogListing({ initialLanguage }: BlogListingProps) {
+  const appLanguage = useAppLanguage(initialLanguage ?? 'en')
+  const copy = appCopy[appLanguage]
   const [selectedLanguage, setSelectedLanguage] = useState<ArticleLanguage | 'all'>(
     initialLanguage ?? 'all'
   )
@@ -61,9 +66,9 @@ export default function BlogListing({ initialLanguage }: BlogListingProps) {
   }, [selectedLanguage])
 
   const pageTitle = useMemo(() => {
-    if (selectedLanguage === 'all') return 'AI Articles'
-    return `${getLanguageName(selectedLanguage)} AI Articles`
-  }, [selectedLanguage])
+    if (selectedLanguage === 'all') return copy.aiArticles
+    return copy.languageArticles[selectedLanguage]
+  }, [copy, selectedLanguage])
 
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top,#021a12_0%,#000000_70%)] px-5 pb-20 pt-32 text-white transition-colors sm:px-8">
@@ -88,7 +93,7 @@ export default function BlogListing({ initialLanguage }: BlogListingProps) {
                   : 'border border-white/15 text-white/65 hover:bg-white/10'
               }`}
             >
-              All
+              {copy.all}
             </Link>
 
             {articleLanguages.map(language => (
@@ -102,7 +107,7 @@ export default function BlogListing({ initialLanguage }: BlogListingProps) {
                     : 'border border-white/15 text-white/65 hover:bg-white/10'
                 }`}
               >
-                {language.label}
+                {getArticleLanguageLabel(language.code, appLanguage)}
               </Link>
             ))}
           </div>
@@ -110,12 +115,12 @@ export default function BlogListing({ initialLanguage }: BlogListingProps) {
 
         {loading ? (
           <div className="text-white/60">
-            Loading articles...
+            {copy.loading}
           </div>
         ) : articles.length === 0 ? (
           <div className="rounded-lg border border-white/10 bg-black/35 p-8">
             <p className="text-white/60">
-              No articles have been published for this view yet.
+              {copy.noArticles}
             </p>
           </div>
         ) : (
@@ -137,7 +142,7 @@ export default function BlogListing({ initialLanguage }: BlogListingProps) {
                       {getLanguageName(article.language)}
                     </span>
                     <span className="text-white/45">
-                      {getReadTime(article.content)}
+                      {getReadTime(article.content, copy.readTimeSuffix)}
                     </span>
                   </div>
                   <p className="mb-3 text-xs text-white/45">

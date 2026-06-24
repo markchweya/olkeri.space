@@ -498,6 +498,9 @@ export default function AdminPage() {
                         <p className="mt-1 text-xs text-white/45">
                           {getReadTime(article.content)}
                         </p>
+                        <p className="mt-1 text-xs text-white/45">
+                          {article.views ?? 0} views
+                        </p>
                       </div>
                       <button
                         type="button"

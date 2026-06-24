@@ -2,9 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { appCopy, isArticleLanguage } from '@/lib/articles'
+import { useAppLanguage } from '@/lib/use-app-language'
 
 export default function Header() {
   const pathname = usePathname()
+  const pathLanguage = pathname.split('/')[1]
+  const appLanguage = useAppLanguage(isArticleLanguage(pathLanguage) ? pathLanguage : 'en')
+  const copy = appCopy[appLanguage]
 
   return (
     <header className="absolute top-0 left-0 w-full z-50 bg-transparent">
@@ -15,7 +20,7 @@ export default function Header() {
               href="/"
               className="text-white hover:text-green-400 transition-colors duration-200"
             >
-              Home
+              {copy.navHome}
             </Link>
           )}
 
@@ -24,7 +29,7 @@ export default function Header() {
               href="/blog"
               className="text-white hover:text-green-400 transition-colors duration-200"
             >
-              Blog
+              {copy.navBlog}
             </Link>
           )}
 
@@ -33,7 +38,7 @@ export default function Header() {
               href="/contact"
               className="text-white hover:text-green-400 transition-colors duration-200"
             >
-              Contact
+              {copy.navContact}
             </Link>
           )}
         </nav>
