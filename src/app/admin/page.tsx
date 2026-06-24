@@ -6,6 +6,7 @@ import {
   createSlug,
   getArticlePath,
   getLanguageName,
+  getReadTime,
   type Article,
   type ArticleLanguage,
 } from '@/lib/articles'
@@ -38,6 +39,7 @@ export default function AdminPage() {
   const [languageFilter, setLanguageFilter] = useState<ArticleLanguage | 'all'>('all')
   const [message, setMessage] = useState('')
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
 
   const loadArticles = useCallback(async () => {
     const supabase = getSupabase()
@@ -147,6 +149,58 @@ export default function AdminPage() {
       title,
       slug: current.slug ? current.slug : createSlug(title),
     }))
+  }
+
+  async function uploadImage(file: File) {
+    setMessage('')
+
+    if (!userId) {
+      setMessage('Sign in before uploading an image.')
+      return
+    }
+
+    if (!file.type.startsWith('image/')) {
+      setMessage('Please upload an image file.')
+      return
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setMessage('Image must be 5MB or smaller.')
+      return
+    }
+
+    const supabase = getSupabase()
+    if (!supabase) {
+      setMessage('Supabase is not configured.')
+      return
+    }
+
+    setUploading(true)
+
+    const extension = file.name.split('.').pop()?.toLowerCase() ?? 'jpg'
+    const baseSlug = createSlug(form.slug || form.title || 'article-image')
+    const path = `${userId}/${Date.now()}-${baseSlug}.${extension}`
+
+    const { error } = await supabase.storage
+      .from('article-images')
+      .upload(path, file, {
+        cacheControl: '31536000',
+        upsert: false,
+      })
+
+    if (error) {
+      setUploading(false)
+      setMessage(error.message)
+      return
+    }
+
+    const { data } = supabase.storage
+      .from('article-images')
+      .getPublicUrl(path)
+
+    setForm(current => ({ ...current, imageUrl: data.publicUrl }))
+    setUploading(false)
+    setMessage('Image uploaded. The photo URL has been added.')
   }
 
   async function publishArticle(event: React.FormEvent<HTMLFormElement>) {
@@ -346,6 +400,29 @@ export default function AdminPage() {
                   className="mt-2 w-full rounded-md border border-white/15 bg-black/40 px-4 py-3 text-white outline-none transition-colors focus:border-green-400"
                   placeholder="https://..."
                 />
+                <span className="mt-2 block text-xs leading-5 text-white/45">
+                  Use a 16:9 image for best results. Recommended size: 1600x900px. Minimum: 1200x675px.
+                </span>
+              </label>
+
+              <label className="block sm:col-span-2">
+                <span className="text-sm text-white/65">Upload photo</span>
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  disabled={uploading}
+                  onChange={event => {
+                    const file = event.target.files?.[0]
+                    if (file) {
+                      uploadImage(file)
+                    }
+                    event.target.value = ''
+                  }}
+                  className="mt-2 w-full rounded-md border border-white/15 bg-black/40 px-4 py-3 text-white file:mr-4 file:rounded-md file:border-0 file:bg-green-400 file:px-4 file:py-2 file:text-sm file:font-medium file:text-black disabled:cursor-not-allowed disabled:opacity-60"
+                />
+                <span className="mt-2 block text-xs leading-5 text-white/45">
+                  JPG, PNG, or WebP. Max 5MB. Uploaded images are cropped responsively to 16:9 in cards and article pages.
+                </span>
               </label>
 
               <label className="block sm:col-span-2">
@@ -417,6 +494,9 @@ export default function AdminPage() {
                         <h3 className="mt-1 font-medium">{article.title}</h3>
                         <p className="mt-1 text-xs text-white/45">
                           {getArticlePath(article)}
+                        </p>
+                        <p className="mt-1 text-xs text-white/45">
+                          {getReadTime(article.content)}
                         </p>
                       </div>
                       <button

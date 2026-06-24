@@ -67,3 +67,64 @@ on ai_articles
 for delete
 to authenticated
 using (auth.uid() = author_id);
+
+insert into storage.buckets (
+  id,
+  name,
+  public,
+  file_size_limit,
+  allowed_mime_types
+)
+values (
+  'article-images',
+  'article-images',
+  true,
+  5242880,
+  array['image/jpeg', 'image/png', 'image/webp']
+)
+on conflict (id) do update
+set
+  public = excluded.public,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
+
+drop policy if exists "Article images are public" on storage.objects;
+drop policy if exists "Authenticated users can upload article images" on storage.objects;
+drop policy if exists "Authenticated users can update own article images" on storage.objects;
+drop policy if exists "Authenticated users can delete own article images" on storage.objects;
+
+create policy "Article images are public"
+on storage.objects
+for select
+using (bucket_id = 'article-images');
+
+create policy "Authenticated users can upload article images"
+on storage.objects
+for insert
+to authenticated
+with check (
+  bucket_id = 'article-images'
+  and owner = auth.uid()
+);
+
+create policy "Authenticated users can update own article images"
+on storage.objects
+for update
+to authenticated
+using (
+  bucket_id = 'article-images'
+  and owner = auth.uid()
+)
+with check (
+  bucket_id = 'article-images'
+  and owner = auth.uid()
+);
+
+create policy "Authenticated users can delete own article images"
+on storage.objects
+for delete
+to authenticated
+using (
+  bucket_id = 'article-images'
+  and owner = auth.uid()
+);

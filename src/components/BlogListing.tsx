@@ -7,6 +7,7 @@ import {
   articleLanguages,
   getArticlePath,
   getLanguageName,
+  getReadTime,
   type Article,
   type ArticleLanguage,
 } from '@/lib/articles'
@@ -136,9 +137,12 @@ export default function BlogListing({ initialLanguage }: BlogListingProps) {
                       {getLanguageName(article.language)}
                     </span>
                     <span className="text-white/45">
-                      {new Date(article.published_at ?? article.created_at).toLocaleDateString()}
+                      {getReadTime(article.content)}
                     </span>
                   </div>
+                  <p className="mb-3 text-xs text-white/45">
+                    {new Date(article.published_at ?? article.created_at).toLocaleDateString()}
+                  </p>
                   <h2 className="text-xl font-medium leading-snug group-hover:text-green-400">
                     {article.title}
                   </h2>

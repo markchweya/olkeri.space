@@ -18,6 +18,16 @@ export type Article = {
   published_at: string | null
 }
 
+export function getReadTime(content: string) {
+  const words = content
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length
+  const minutes = Math.max(1, Math.ceil(words / 220))
+
+  return `${minutes} min read`
+}
+
 export function isArticleLanguage(value: string): value is ArticleLanguage {
   return articleLanguages.some(language => language.code === value)
 }

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import ArticleFallbackImage from '@/components/ArticleFallbackImage'
-import { getLanguageName, isArticleLanguage, type Article } from '@/lib/articles'
+import { getLanguageName, getReadTime, isArticleLanguage, type Article } from '@/lib/articles'
 import { getSupabase } from '@/lib/supabase'
 
 type ArticlePageProps = {
@@ -47,7 +47,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
         <p className="mt-8 text-sm text-green-300/75">
           {getLanguageName(article.language)} |{' '}
-          {new Date(article.published_at ?? article.created_at).toLocaleDateString()}
+          {new Date(article.published_at ?? article.created_at).toLocaleDateString()} |{' '}
+          {getReadTime(article.content)}
         </p>
         <h1 className="mt-4 text-4xl font-medium leading-tight sm:text-6xl">
           {article.title}
