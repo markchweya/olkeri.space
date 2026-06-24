@@ -2,6 +2,7 @@ import './globals.css'
 import { Space_Grotesk } from 'next/font/google'
 import ClientLayout from '@/components/ClientLayout'
 import Link from 'next/link'
+import { articleLanguages } from '@/lib/articles'
 import { legalNavItems } from '@/lib/legal-pages'
 
 const spaceGrotesk = Space_Grotesk({
@@ -36,6 +37,21 @@ export default function RootLayout({
                 </p>
 
                 <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-white/60">
+                  <Link
+                    href="/blog"
+                    className="hover:text-green-400 transition-colors"
+                  >
+                    AI Articles
+                  </Link>
+                  {articleLanguages.map(language => (
+                    <Link
+                      key={language.code}
+                      href={`/${language.code}`}
+                      className="hover:text-green-400 transition-colors"
+                    >
+                      {language.code.toUpperCase()}
+                    </Link>
+                  ))}
                   {legalNavItems.map(item => (
                     <Link
                       key={item.href}

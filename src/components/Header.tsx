@@ -19,6 +19,15 @@ export default function Header() {
             </Link>
           )}
 
+          {pathname !== '/blog' && (
+            <Link
+              href="/blog"
+              className="text-white hover:text-green-400 transition-colors duration-200"
+            >
+              Blog
+            </Link>
+          )}
+
           {pathname !== '/contact' && (
             <Link
               href="/contact"

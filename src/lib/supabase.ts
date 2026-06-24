@@ -1,6 +1,6 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-let supabase: ReturnType<typeof createClient> | null = null
+let supabase: SupabaseClient | null = null
 
 export function getSupabase() {
   if (supabase) return supabase
@@ -10,7 +10,7 @@ export function getSupabase() {
 
   if (!supabaseUrl || !supabaseAnonKey) {
     console.warn('Supabase environment variables are missing')
-    return null as any
+    return null
   }
 
   supabase = createClient(supabaseUrl, supabaseAnonKey)

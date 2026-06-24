@@ -5,6 +5,11 @@ export function middleware(request: NextRequest) {
   const host = request.headers.get('host') ?? ''
   const url = request.nextUrl.clone()
 
+  if (host.startsWith('aimploy.') && url.pathname === '/') {
+    url.pathname = '/en'
+    return NextResponse.rewrite(url)
+  }
+
   if (host.startsWith('dashboard.') && !url.pathname.startsWith('/dashboard')) {
     url.pathname = `/dashboard${url.pathname === '/' ? '' : url.pathname}`
     return NextResponse.rewrite(url)
