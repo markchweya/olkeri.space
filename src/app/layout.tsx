@@ -2,6 +2,7 @@ import './globals.css'
 import { Space_Grotesk } from 'next/font/google'
 import ClientLayout from '@/components/ClientLayout'
 import Link from 'next/link'
+import { legalNavItems } from '@/lib/legal-pages'
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -34,13 +35,16 @@ export default function RootLayout({
                   © {new Date().getFullYear()} olkeri.space
                 </p>
 
-                <div className="flex items-center gap-6 text-white/60">
-                  <Link
-                    href="/privacy"
-                    className="hover:text-green-400 transition-colors"
-                  >
-                    Privacy Policy
-                  </Link>
+                <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-white/60">
+                  {legalNavItems.map(item => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="hover:text-green-400 transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
                 </div>
               </div>
             </footer>
