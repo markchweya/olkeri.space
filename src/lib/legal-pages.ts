@@ -129,3 +129,150 @@ export const legalNavItems = [
   { href: '/editorial-policy', label: 'Editorial' },
   { href: '/dmca-copyright-policy', label: 'DMCA' },
 ]
+
+export const localizedLegalPages: Record<'fr' | 'de', Record<string, Partial<LegalPageContent>>> = {
+  fr: {
+    'privacy-policy': {
+      title: 'Politique de confidentialite',
+      intro: [
+        'Bienvenue sur Olkeri Space, accessible sur olkeri.space.',
+        'Cette politique explique comment nous collectons, utilisons et protegeons vos informations lorsque vous utilisez notre site.',
+        'En utilisant notre site, vous acceptez les pratiques decrites dans cette politique.',
+      ],
+      blocks: [
+        { heading: 'Informations collectees', body: ['Nous pouvons collecter votre nom, votre adresse e-mail, vos coordonnees, vos inscriptions a la newsletter et les informations envoyees via nos formulaires.'] },
+        { heading: 'Informations automatiques', body: ['Nous pouvons collecter l adresse IP, le navigateur, le type d appareil, le systeme d exploitation, les pages consultees, les sources de trafic et la localisation generale.'] },
+        { heading: 'Utilisation des informations', body: ['Nous utilisons ces donnees pour envoyer des newsletters, repondre aux demandes, ameliorer le site, analyser le trafic, personnaliser le contenu, detecter les abus et respecter nos obligations legales.'] },
+        { heading: 'Cookies et publicite', body: ['Nous utilisons des cookies pour les performances, les preferences, l analyse et la publicite. Google AdSense et d autres partenaires peuvent utiliser des cookies publicitaires.'] },
+        { heading: 'Securite des donnees', body: ['Nous appliquons des mesures raisonnables pour proteger les informations, mais aucune transmission sur Internet ne peut etre garantie comme totalement sure.'] },
+        { heading: 'Vie privee des enfants', body: ['Le site ne s adresse pas aux enfants de moins de 13 ans et nous ne collectons pas volontairement leurs donnees personnelles.'] },
+        { heading: 'Contenu IA', body: ['Olkeri Space publie des actualites, analyses et contenus educatifs sur l intelligence artificielle. Les informations peuvent devenir obsoletes.'] },
+        { heading: 'Contact', body: ['Olkeri Space', 'Site web: olkeri.space'], bullets: ['Email: chweyahub@gmail.com'] },
+      ],
+    },
+    'terms-and-conditions': {
+      title: 'Conditions generales',
+      intro: ['En accedant a olkeri.space, vous acceptez ces conditions generales.'],
+      blocks: [
+        { heading: 'Utilisation du site', body: ['Vous acceptez d utiliser le site legalement et de ne pas perturber son fonctionnement, distribuer de logiciels malveillants, tenter un acces non autorise ou extraire le contenu sans permission.'] },
+        { heading: 'Propriete intellectuelle', body: ['Sauf indication contraire, le contenu publie sur Olkeri Space appartient a Olkeri Space. Vous pouvez lire et partager des liens, mais pas republier ou vendre le contenu sans autorisation.'] },
+        { heading: 'Services tiers', body: ['Nous pouvons mentionner des entreprises, produits et services tiers. Les marques appartiennent a leurs proprietaires respectifs.'] },
+        { heading: 'Responsabilite', body: ['Olkeri Space n est pas responsable des dommages lies a l utilisation du site, aux erreurs, aux omissions ou aux interruptions de service.'] },
+        { heading: 'Contact', body: ['Olkeri Space', 'Site web: olkeri.space'], bullets: ['Email: chweyahub@gmail.com'] },
+      ],
+    },
+    'cookie-policy': {
+      title: 'Politique relative aux cookies',
+      intro: ['Cette page explique comment Olkeri Space utilise les cookies.'],
+      blocks: [
+        { heading: 'Que sont les cookies ?', body: ['Les cookies sont de petits fichiers stockes sur votre appareil pour ameliorer le fonctionnement du site et l experience utilisateur.'] },
+        { heading: 'Cookies utilises', body: ['Nous pouvons utiliser des cookies essentiels, analytiques, publicitaires et fonctionnels.'] },
+        { heading: 'Gestion des cookies', body: ['Vous pouvez bloquer ou supprimer les cookies depuis les parametres de votre navigateur. Certaines fonctions peuvent etre limitees.'] },
+        { heading: 'Cookies tiers', body: ['Google, YouTube, les plateformes sociales et les services d analyse peuvent placer leurs propres cookies.'] },
+        { heading: 'Contact', body: ['Olkeri Space', 'Site web: olkeri.space'], bullets: ['Email: chweyahub@gmail.com'] },
+      ],
+    },
+    disclaimer: {
+      title: 'Avertissement',
+      intro: ['Les informations publiees sur olkeri.space sont fournies uniquement a titre informatif et educatif.'],
+      blocks: [
+        { heading: 'Actualites et analyses', body: ['Nous publions des actualites, avis, analyses et commentaires sur l intelligence artificielle et la technologie. Les informations peuvent devenir obsoletes.'] },
+        { heading: 'Pas de conseil professionnel', body: ['Le contenu ne constitue pas un conseil juridique, financier, fiscal, commercial ou d investissement. Consultez un professionnel qualifie si necessaire.'] },
+        { heading: 'Liens externes', body: ['Nous ne sommes pas responsables des sites ou services tiers lies depuis notre plateforme.'] },
+        { heading: 'Contact', body: ['Olkeri Space', 'Site web: olkeri.space'], bullets: ['Email: chweyahub@gmail.com'] },
+      ],
+    },
+    'editorial-policy': {
+      title: 'Politique editoriale',
+      intro: ['Olkeri Space vise a fournir une couverture fiable, claire et utile de l intelligence artificielle, de la technologie et de l innovation.'],
+      blocks: [
+        { heading: 'Independance editoriale', body: ['Nos decisions editoriales sont independantes et ne sont pas influencees par la publicite, les affiliations ou les partenariats.'] },
+        { heading: 'Exactitude', body: ['Nous cherchons a verifier les faits, utiliser des sources credibles, attribuer les informations et corriger rapidement les erreurs.'] },
+        { heading: 'Sources', body: ['Nous privilegions les annonces officielles, documents publics, articles de recherche, depots reglementaires et declarations de premiere main.'] },
+        { heading: 'Contact', body: ['Olkeri Space', 'Site web: olkeri.space'], bullets: ['Email: chweyahub@gmail.com'] },
+      ],
+    },
+    'dmca-copyright-policy': {
+      title: 'Politique DMCA / droits d auteur',
+      intro: ['Olkeri Space respecte les droits de propriete intellectuelle des autres.'],
+      blocks: [
+        { heading: 'Propriete du contenu', body: ['Sauf indication contraire, le contenu publie sur olkeri.space appartient a Olkeri Space et est protege par les lois applicables.'] },
+        { heading: 'Utilisation autorisee', body: ['Vous pouvez partager des liens et citer de courts extraits avec attribution. Vous ne pouvez pas republier des articles entiers sans autorisation.'] },
+        { heading: 'Reclamations', body: ['Envoyez les avis de violation de droits d auteur a chweyahub@gmail.com avec le sujet Copyright Infringement Notice.'] },
+        { heading: 'Contact', body: ['Olkeri Space', 'Site web: olkeri.space'], bullets: ['Email: chweyahub@gmail.com'] },
+      ],
+    },
+  },
+  de: {
+    'privacy-policy': {
+      title: 'Datenschutzerklarung',
+      intro: [
+        'Willkommen bei Olkeri Space, erreichbar unter olkeri.space.',
+        'Diese Datenschutzerklarung erklaert, wie wir Informationen sammeln, verwenden und schutzen, wenn Sie unsere Website nutzen.',
+        'Durch die Nutzung der Website stimmen Sie diesen Praktiken zu.',
+      ],
+      blocks: [
+        { heading: 'Welche Informationen wir sammeln', body: ['Wir konnen Name, E-Mail-Adresse, Kontaktdaten, Newsletter-Anmeldungen und Informationen aus Kontaktformularen erfassen.'] },
+        { heading: 'Automatisch erfasste Informationen', body: ['Dazu konnen IP-Adresse, Browser, Gerat, Betriebssystem, besuchte Seiten, Traffic-Quellen, Sitzungsdauer und allgemeiner Standort gehoren.'] },
+        { heading: 'Wie wir Informationen nutzen', body: ['Wir verwenden Informationen fur Newsletter, Antworten auf Anfragen, Website-Verbesserungen, Traffic-Analyse, Personalisierung, Missbrauchserkennung und rechtliche Pflichten.'] },
+        { heading: 'Cookies und Werbung', body: ['Wir nutzen Cookies fur Leistung, Einstellungen, Analyse und Werbung. Google AdSense und andere Partner konnen Werbe-Cookies verwenden.'] },
+        { heading: 'Datensicherheit', body: ['Wir nutzen angemessene Schutzmassnahmen, konnen aber keine vollstandige Sicherheit bei Internetubertragungen garantieren.'] },
+        { heading: 'Kinder', body: ['Unsere Website richtet sich nicht an Kinder unter 13 Jahren. Wir sammeln wissentlich keine personenbezogenen Daten von Kindern unter 13 Jahren.'] },
+        { heading: 'KI-Inhalte', body: ['Olkeri Space veroffentlicht Nachrichten, Analysen und Bildungsinhalte zu kunstlicher Intelligenz. Informationen konnen veralten.'] },
+        { heading: 'Kontakt', body: ['Olkeri Space', 'Website: olkeri.space'], bullets: ['Email: chweyahub@gmail.com'] },
+      ],
+    },
+    'terms-and-conditions': {
+      title: 'Allgemeine Bedingungen',
+      intro: ['Durch den Zugriff auf olkeri.space stimmen Sie diesen Bedingungen zu.'],
+      blocks: [
+        { heading: 'Nutzung der Website', body: ['Sie verpflichten sich, die Website rechtmassig zu nutzen und keine Gesetze zu verletzen, Malware zu verbreiten, unbefugten Zugriff zu versuchen oder den Betrieb zu storen.'] },
+        { heading: 'Geistiges Eigentum', body: ['Sofern nicht anders angegeben, gehort der Inhalt von Olkeri Space Olkeri Space. Sie durfen Inhalte lesen und Links teilen, aber nicht ohne Erlaubnis republizieren oder verkaufen.'] },
+        { heading: 'Drittanbieter', body: ['Wir konnen Unternehmen, Produkte und Dienste Dritter besprechen. Marken bleiben Eigentum ihrer jeweiligen Inhaber.'] },
+        { heading: 'Haftungsbeschrankung', body: ['Olkeri Space haftet nicht fur Schaden aus Nutzung der Website, Vertrauen auf Inhalte, Fehler, Auslassungen oder Serviceunterbrechungen.'] },
+        { heading: 'Kontakt', body: ['Olkeri Space', 'Website: olkeri.space'], bullets: ['Email: chweyahub@gmail.com'] },
+      ],
+    },
+    'cookie-policy': {
+      title: 'Cookie-Richtlinie',
+      intro: ['Diese Seite erklart, wie Olkeri Space Cookies verwendet.'],
+      blocks: [
+        { heading: 'Was sind Cookies?', body: ['Cookies sind kleine Dateien auf Ihrem Gerat, die Funktionen und Nutzererfahrung verbessern.'] },
+        { heading: 'Welche Cookies wir nutzen', body: ['Wir konnen notwendige, analytische, werbliche und funktionale Cookies verwenden.'] },
+        { heading: 'Cookies verwalten', body: ['Sie konnen Cookies in Ihren Browser-Einstellungen blockieren oder loschen. Manche Funktionen konnen dadurch eingeschrankt sein.'] },
+        { heading: 'Cookies von Dritten', body: ['Google, YouTube, soziale Plattformen und Analyseanbieter konnen eigene Cookies setzen.'] },
+        { heading: 'Kontakt', body: ['Olkeri Space', 'Website: olkeri.space'], bullets: ['Email: chweyahub@gmail.com'] },
+      ],
+    },
+    disclaimer: {
+      title: 'Haftungsausschluss',
+      intro: ['Die Informationen auf olkeri.space dienen nur Informations- und Bildungszwecken.'],
+      blocks: [
+        { heading: 'Berichterstattung', body: ['Wir veroffentlichen Nachrichten, Bewertungen, Analysen und Kommentare zu kunstlicher Intelligenz und Technologie. Informationen konnen nach der Veroffentlichung veralten.'] },
+        { heading: 'Keine professionelle Beratung', body: ['Nichts auf dieser Website ist Rechts-, Finanz-, Steuer-, Geschafts- oder Anlageberatung. Wenden Sie sich bei Bedarf an qualifizierte Fachleute.'] },
+        { heading: 'Externe Links', body: ['Wir sind nicht verantwortlich fur Websites oder Dienste Dritter.'] },
+        { heading: 'Kontakt', body: ['Olkeri Space', 'Website: olkeri.space'], bullets: ['Email: chweyahub@gmail.com'] },
+      ],
+    },
+    'editorial-policy': {
+      title: 'Redaktionelle Richtlinie',
+      intro: ['Olkeri Space mochte verlassliche und verstandliche Berichterstattung uber KI, Technologie, Innovation und digitale Transformation bieten.'],
+      blocks: [
+        { heading: 'Redaktionelle Unabhangigkeit', body: ['Unsere redaktionellen Entscheidungen sind unabhangig und werden nicht durch Werbung, Affiliate-Beziehungen oder Partnerschaften beeinflusst.'] },
+        { heading: 'Genauigkeit', body: ['Wir bemuhen uns, Fakten zu prufen, glaubwurdige Quellen zu nutzen, Informationen zuzuordnen und Fehler zeitnah zu korrigieren.'] },
+        { heading: 'Quellen', body: ['Wir bevorzugen offizielle Ankundigungen, offentliche Dokumentation, Forschungsarbeiten, regulatorische Unterlagen und Aussagen aus erster Hand.'] },
+        { heading: 'Kontakt', body: ['Olkeri Space', 'Website: olkeri.space'], bullets: ['Email: chweyahub@gmail.com'] },
+      ],
+    },
+    'dmca-copyright-policy': {
+      title: 'DMCA / Urheberrechtsrichtlinie',
+      intro: ['Olkeri Space respektiert die Rechte an geistigem Eigentum anderer.'],
+      blocks: [
+        { heading: 'Eigentum am Inhalt', body: ['Sofern nicht anders angegeben, gehort der Inhalt auf olkeri.space Olkeri Space und ist urheberrechtlich geschutzt.'] },
+        { heading: 'Erlaubte Nutzung', body: ['Sie durfen Links teilen und kurze Ausschnitte mit Quellenangabe zitieren. Ganze Artikel durfen ohne Erlaubnis nicht erneut veroffentlicht werden.'] },
+        { heading: 'Anspruche', body: ['Senden Sie Urheberrechtsbeschwerden an chweyahub@gmail.com mit dem Betreff Copyright Infringement Notice.'] },
+        { heading: 'Kontakt', body: ['Olkeri Space', 'Website: olkeri.space'], bullets: ['Email: chweyahub@gmail.com'] },
+      ],
+    },
+  },
+}

@@ -1,135 +1,87 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { appCopy } from '@/lib/articles'
+import { useAppLanguage } from '@/lib/use-app-language'
+
+type ContactForm = {
+  name: string
+  email: string
+  message: string
+}
 
 export default function ContactPage() {
+  const appLanguage = useAppLanguage()
+  const copy = appCopy[appLanguage].contact
   const [mounted, setMounted] = useState(false)
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<ContactForm>({
     name: '',
     email: '',
     message: '',
   })
 
   useEffect(() => {
-    setMounted(true)
+    const timeout = window.setTimeout(() => {
+      setMounted(true)
+    }, 0)
+
+    return () => window.clearTimeout(timeout)
   }, [])
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        background: 'radial-gradient(circle at top, #021a12 0%, #000000 70%)',
-        color: 'white',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '40px',
-        overflow: 'hidden',
-      }}
-    >
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#021a12_0%,#000000_70%)] px-6 py-32 text-white">
       <div
-        style={{
-          width: '100%',
-          maxWidth: '620px',
-          transform: mounted ? 'translateY(0px)' : 'translateY(40px)',
-          opacity: mounted ? 1 : 0,
-          transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
-        }}
+        className={`mx-auto w-full max-w-3xl transition-all duration-700 ${
+          mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+        }`}
       >
-        <h1
-          style={{
-            fontSize: 'clamp(40px, 5vw, 60px)',
-            fontWeight: 500,
-            marginBottom: '20px',
-            background: 'linear-gradient(90deg, #ffffff 0%, #00ff9d 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}
-        >
-          Let’s Build Something
+        <h1 className="bg-gradient-to-r from-white to-green-300 bg-clip-text text-5xl font-medium leading-tight text-transparent sm:text-7xl">
+          {copy.title}
         </h1>
 
-        <p
-          style={{
-            fontSize: '16px',
-            opacity: 0.75,
-            marginBottom: '40px',
-            lineHeight: 1.6,
-          }}
-        >
-          Tell us about your idea. We’ll respond within 24 hours with a clear next step.
+        <p className="mt-8 text-base leading-7 text-white/72 sm:text-lg">
+          {copy.intro}
         </p>
 
-        <form
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '22px',
-          }}
-        >
-          {['name', 'email'].map((field, i) => (
-            <input
-              key={field}
-              placeholder={field === 'name' ? 'Your Name' : 'Your Email'}
-              type={field === 'email' ? 'email' : 'text'}
-              value={(form as any)[field]}
-              onChange={e => setForm({ ...form, [field]: e.target.value })}
-              style={{
-                padding: '16px',
-                borderRadius: '8px',
-                border: '1px solid rgba(0,255,157,0.3)',
-                background: 'rgba(0,0,0,0.5)',
-                color: 'white',
-                fontSize: '14px',
-                outline: 'none',
-                transition: 'all 0.3s ease',
-              }}
-              onFocus={e => (e.currentTarget.style.border = '1px solid #00ff9d')}
-              onBlur={e => (e.currentTarget.style.border = '1px solid rgba(0,255,157,0.3)')}
-            />
-          ))}
+        <form className="mt-12 space-y-6">
+          <input
+            placeholder={copy.name}
+            type="text"
+            value={form.name}
+            onChange={event =>
+              setForm(current => ({ ...current, name: event.target.value }))
+            }
+            className="w-full rounded-lg border border-green-400/30 bg-black/50 px-5 py-4 text-white outline-none transition-colors focus:border-green-400"
+          />
+
+          <input
+            placeholder={copy.email}
+            type="email"
+            value={form.email}
+            onChange={event =>
+              setForm(current => ({ ...current, email: event.target.value }))
+            }
+            className="w-full rounded-lg border border-green-400/30 bg-black/50 px-5 py-4 text-white outline-none transition-colors focus:border-green-400"
+          />
 
           <textarea
-            placeholder="Tell us about your project"
-            rows={5}
+            placeholder={copy.message}
+            rows={6}
             value={form.message}
-            onChange={e => setForm({ ...form, message: e.target.value })}
-            style={{
-              padding: '16px',
-              borderRadius: '8px',
-              border: '1px solid rgba(0,255,157,0.3)',
-              background: 'rgba(0,0,0,0.5)',
-              color: 'white',
-              fontSize: '14px',
-              resize: 'none',
-              outline: 'none',
-              transition: 'all 0.3s ease',
-            }}
-            onFocus={e => (e.currentTarget.style.border = '1px solid #00ff9d')}
-            onBlur={e => (e.currentTarget.style.border = '1px solid rgba(0,255,157,0.3)')}
+            onChange={event =>
+              setForm(current => ({ ...current, message: event.target.value }))
+            }
+            className="w-full resize-none rounded-lg border border-green-400/30 bg-black/50 px-5 py-4 text-white outline-none transition-colors focus:border-green-400"
           />
 
           <button
             type="button"
-            style={{
-              marginTop: '10px',
-              padding: '16px',
-              borderRadius: '8px',
-              border: 'none',
-              background: 'linear-gradient(90deg, #00ff9d 0%, #00cc7a 100%)',
-              color: '#000',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transform: 'scale(1)',
-              transition: 'all 0.3s ease',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.05)')}
-            onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+            className="rounded-lg bg-gradient-to-r from-green-400 to-green-500 px-6 py-4 font-semibold text-black transition-transform hover:scale-[1.02]"
           >
-            Send Message
+            {copy.submit}
           </button>
         </form>
       </div>
-    </div>
+    </main>
   )
 }
