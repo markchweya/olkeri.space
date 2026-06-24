@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import Header from '@/components/Header'
 import IntroAnimation from '@/components/IntroAnimation'
 import CookieConsent from '@/components/CookieConsent'
+import AccessibilityControls from '@/components/AccessibilityControls'
 
 export default function ClientLayout({
   children,
@@ -27,7 +28,12 @@ export default function ClientLayout({
 
   useEffect(() => {
     if (pathname === initialPathname.current) return
-    setShowRouteIntro(true)
+
+    const timeout = window.setTimeout(() => {
+      setShowRouteIntro(true)
+    }, 0)
+
+    return () => window.clearTimeout(timeout)
   }, [pathname])
 
   return (
@@ -64,6 +70,7 @@ export default function ClientLayout({
       </AnimatePresence>
 
       <CookieConsent />
+      <AccessibilityControls />
     </>
   )
 }

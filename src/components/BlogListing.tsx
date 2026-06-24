@@ -17,7 +17,6 @@ type BlogListingProps = {
 }
 
 export default function BlogListing({ initialLanguage }: BlogListingProps) {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
   const [selectedLanguage, setSelectedLanguage] = useState<ArticleLanguage | 'all'>(
     initialLanguage ?? 'all'
   )
@@ -65,20 +64,12 @@ export default function BlogListing({ initialLanguage }: BlogListingProps) {
     return `${getLanguageName(selectedLanguage)} AI Articles`
   }, [selectedLanguage])
 
-  const light = theme === 'light'
-
   return (
-    <main
-      className={`min-h-screen px-5 pb-20 pt-32 transition-colors sm:px-8 ${
-        light
-          ? 'bg-[#f5f7f2] text-[#101610]'
-          : 'bg-[radial-gradient(circle_at_top,#021a12_0%,#000000_70%)] text-white'
-      }`}
-    >
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#021a12_0%,#000000_70%)] px-5 pb-20 pt-32 text-white transition-colors sm:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className={light ? 'text-sm text-black/55' : 'text-sm text-green-300/80'}>
+            <p className="text-sm text-green-300/80">
               aimploy.olkeri.space
             </p>
             <h1 className="mt-3 text-4xl font-medium leading-tight sm:text-6xl">
@@ -87,27 +78,13 @@ export default function BlogListing({ initialLanguage }: BlogListingProps) {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setTheme(light ? 'dark' : 'light')}
-              className={`rounded-md border px-4 py-2 text-sm transition-colors ${
-                light
-                  ? 'border-black/15 hover:bg-black/5'
-                  : 'border-white/15 hover:bg-white/10'
-              }`}
-            >
-              {light ? 'Dark mode' : 'Light mode'}
-            </button>
-
             <Link
               href="/blog"
               onClick={() => setSelectedLanguage('all')}
               className={`rounded-md px-4 py-2 text-sm transition-colors ${
                 selectedLanguage === 'all'
                   ? 'bg-green-400 text-black'
-                  : light
-                    ? 'border border-black/15 text-black/65 hover:bg-black/5'
-                    : 'border border-white/15 text-white/65 hover:bg-white/10'
+                  : 'border border-white/15 text-white/65 hover:bg-white/10'
               }`}
             >
               All
@@ -121,9 +98,7 @@ export default function BlogListing({ initialLanguage }: BlogListingProps) {
                 className={`rounded-md px-4 py-2 text-sm transition-colors ${
                   selectedLanguage === language.code
                     ? 'bg-green-400 text-black'
-                    : light
-                      ? 'border border-black/15 text-black/65 hover:bg-black/5'
-                      : 'border border-white/15 text-white/65 hover:bg-white/10'
+                    : 'border border-white/15 text-white/65 hover:bg-white/10'
                 }`}
               >
                 {language.label}
@@ -133,16 +108,12 @@ export default function BlogListing({ initialLanguage }: BlogListingProps) {
         </div>
 
         {loading ? (
-          <div className={light ? 'text-black/60' : 'text-white/60'}>
+          <div className="text-white/60">
             Loading articles...
           </div>
         ) : articles.length === 0 ? (
-          <div
-            className={`rounded-lg border p-8 ${
-              light ? 'border-black/10 bg-white' : 'border-white/10 bg-black/35'
-            }`}
-          >
-            <p className={light ? 'text-black/60' : 'text-white/60'}>
+          <div className="rounded-lg border border-white/10 bg-black/35 p-8">
+            <p className="text-white/60">
               No articles have been published for this view yet.
             </p>
           </div>
@@ -152,11 +123,7 @@ export default function BlogListing({ initialLanguage }: BlogListingProps) {
               <Link
                 key={article.id}
                 href={getArticlePath(article)}
-                className={`group overflow-hidden rounded-lg border transition-transform hover:-translate-y-1 ${
-                  light
-                    ? 'border-black/10 bg-white shadow-sm'
-                    : 'border-white/10 bg-black/40 shadow-2xl shadow-green-950/20'
-                }`}
+                className="group overflow-hidden rounded-lg border border-white/10 bg-black/40 shadow-2xl shadow-green-950/20 transition-transform hover:-translate-y-1"
               >
                 <ArticleFallbackImage
                   title={article.title}
@@ -165,21 +132,17 @@ export default function BlogListing({ initialLanguage }: BlogListingProps) {
                 />
                 <div className="p-5">
                   <div className="mb-3 flex items-center justify-between gap-3 text-xs">
-                    <span className={light ? 'text-black/55' : 'text-green-300/75'}>
+                    <span className="text-green-300/75">
                       {getLanguageName(article.language)}
                     </span>
-                    <span className={light ? 'text-black/45' : 'text-white/45'}>
+                    <span className="text-white/45">
                       {new Date(article.published_at ?? article.created_at).toLocaleDateString()}
                     </span>
                   </div>
                   <h2 className="text-xl font-medium leading-snug group-hover:text-green-400">
                     {article.title}
                   </h2>
-                  <p
-                    className={`mt-4 line-clamp-3 text-sm leading-6 ${
-                      light ? 'text-black/62' : 'text-white/62'
-                    }`}
-                  >
+                  <p className="mt-4 line-clamp-3 text-sm leading-6 text-white/62">
                     {article.content}
                   </p>
                 </div>
