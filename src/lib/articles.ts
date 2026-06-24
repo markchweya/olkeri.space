@@ -57,6 +57,11 @@ export const appCopy = {
       message: 'Tell us about your project',
       submit: 'Send Message',
     },
+    startProject: {
+      title: 'Start Your Project',
+      intro: 'Let us build something exceptional. Tell us about your vision, and we will turn it into a scalable digital system.',
+      cta: 'Contact Us',
+    },
     legalLabels: {
       privacy: 'Privacy',
       terms: 'Terms',
@@ -93,6 +98,11 @@ export const appCopy = {
       message: 'Parlez-nous de votre projet',
       submit: 'Envoyer le message',
     },
+    startProject: {
+      title: 'Demarrez votre projet',
+      intro: 'Construisons quelque chose d exceptionnel. Parlez-nous de votre vision et nous la transformerons en systeme numerique evolutif.',
+      cta: 'Nous contacter',
+    },
     legalLabels: {
       privacy: 'Confidentialite',
       terms: 'Conditions',
@@ -128,6 +138,11 @@ export const appCopy = {
       email: 'Ihre E-Mail',
       message: 'Erzahlen Sie uns von Ihrem Projekt',
       submit: 'Nachricht senden',
+    },
+    startProject: {
+      title: 'Starten Sie Ihr Projekt',
+      intro: 'Lassen Sie uns etwas Aussergewohnliches bauen. Erzahlen Sie uns von Ihrer Vision, und wir machen daraus ein skalierbares digitales System.',
+      cta: 'Kontakt aufnehmen',
     },
     legalLabels: {
       privacy: 'Datenschutz',
