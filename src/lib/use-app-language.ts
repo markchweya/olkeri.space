@@ -30,18 +30,26 @@ export function setStoredAppLanguage(language: ArticleLanguage) {
   )
 }
 
-export function useAppLanguage(fallback: ArticleLanguage = 'en') {
+export function useAppLanguage(
+  fallback: ArticleLanguage = 'en',
+  lockToFallback = false
+) {
   const [language, setLanguage] = useState<ArticleLanguage>(fallback)
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
-      const nextLanguage = getStoredAppLanguage(fallback)
+      const nextLanguage = lockToFallback ? fallback : getStoredAppLanguage(fallback)
       setLanguage(nextLanguage)
       document.documentElement.lang = nextLanguage
       document.documentElement.dataset.language = nextLanguage
     }, 0)
 
     function handleLanguageChange(event: Event) {
+      if (lockToFallback) {
+        setLanguage(fallback)
+        return
+      }
+
       const customEvent = event as CustomEvent<ArticleLanguage>
       setLanguage(customEvent.detail)
     }
@@ -52,7 +60,7 @@ export function useAppLanguage(fallback: ArticleLanguage = 'en') {
       window.clearTimeout(timeout)
       window.removeEventListener('olkeri-language-change', handleLanguageChange)
     }
-  }, [fallback])
+  }, [fallback, lockToFallback])
 
   return language
 }

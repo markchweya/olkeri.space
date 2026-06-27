@@ -11,8 +11,9 @@ type ThemeMode = 'dark' | 'light'
 export default function AccessibilityControls() {
   const pathname = usePathname()
   const pathLanguage = pathname.split('/')[1]
-  const fallbackLanguage = isArticleLanguage(pathLanguage) ? pathLanguage : 'en'
-  const appLanguage = useAppLanguage(fallbackLanguage)
+  const hasPathLanguage = isArticleLanguage(pathLanguage)
+  const fallbackLanguage = hasPathLanguage ? pathLanguage : 'en'
+  const appLanguage = useAppLanguage(fallbackLanguage, hasPathLanguage)
   const [theme, setTheme] = useState<ThemeMode>('dark')
 
   useEffect(() => {

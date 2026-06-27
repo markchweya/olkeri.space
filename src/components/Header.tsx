@@ -8,7 +8,11 @@ import { useAppLanguage } from '@/lib/use-app-language'
 export default function Header() {
   const pathname = usePathname()
   const pathLanguage = pathname.split('/')[1]
-  const appLanguage = useAppLanguage(isArticleLanguage(pathLanguage) ? pathLanguage : 'en')
+  const hasPathLanguage = isArticleLanguage(pathLanguage)
+  const appLanguage = useAppLanguage(
+    hasPathLanguage ? pathLanguage : 'en',
+    hasPathLanguage
+  )
   const copy = appCopy[appLanguage]
 
   return (
