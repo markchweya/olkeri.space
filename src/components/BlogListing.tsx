@@ -21,13 +21,20 @@ type BlogListingProps = {
 }
 
 export default function BlogListing({ initialLanguage }: BlogListingProps) {
-  const appLanguage = useAppLanguage(initialLanguage ?? 'en')
+  const appLanguage = useAppLanguage(
+    initialLanguage ?? 'en',
+    Boolean(initialLanguage)
+  )
   const copy = appCopy[appLanguage]
   const [selectedLanguage, setSelectedLanguage] = useState<ArticleLanguage | 'all'>(
     initialLanguage ?? 'all'
   )
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setSelectedLanguage(initialLanguage ?? 'all')
+  }, [initialLanguage])
 
   useEffect(() => {
     let cancelled = false
