@@ -34,6 +34,7 @@ export default function AdminPage() {
   const [userId, setUserId] = useState<string | null>(null)
   const [authLoading, setAuthLoading] = useState(true)
   const [form, setForm] = useState<ArticleForm>(emptyForm)
+  const [editingArticleId, setEditingArticleId] = useState<string | null>(null)
   const [articles, setArticles] = useState<Article[]>([])
   const [query, setQuery] = useState('')
   const [languageFilter, setLanguageFilter] = useState<ArticleLanguage | 'all'>('all')
@@ -151,6 +152,24 @@ export default function AdminPage() {
     }))
   }
 
+  function startEditingArticle(article: Article) {
+    setEditingArticleId(article.id)
+    setForm({
+      title: article.title,
+      slug: article.slug,
+      content: article.content,
+      language: article.language,
+      imageUrl: article.image_url ?? '',
+    })
+    setMessage(`Editing "${article.title}".`)
+  }
+
+  function resetArticleForm() {
+    setEditingArticleId(null)
+    setForm(emptyForm)
+    setMessage('')
+  }
+
   async function uploadImage(file: File) {
     setMessage('')
 
@@ -203,12 +222,12 @@ export default function AdminPage() {
     setMessage('Image uploaded. The photo URL has been added.')
   }
 
-  async function publishArticle(event: React.FormEvent<HTMLFormElement>) {
+  async function saveArticle(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setMessage('')
 
     if (!userId) {
-      setMessage('Sign in before publishing.')
+      setMessage(`Sign in before ${editingArticleId ? 'saving' : 'publishing'}.`)
       return
     }
 
@@ -225,14 +244,30 @@ export default function AdminPage() {
 
     setSaving(true)
 
-    const { error } = await supabase.from('ai_articles').insert({
+    const submitter = (event.nativeEvent as SubmitEvent).submitter as
+      | HTMLButtonElement
+      | null
+    const shouldRepublish =
+      !editingArticleId || submitter?.value === 'republish'
+
+    const articlePayload = {
       title: form.title.trim(),
       slug: createSlug(form.slug),
       content: form.content.trim(),
       language: form.language,
       image_url: form.imageUrl.trim() || null,
-      author_id: userId,
-    })
+      ...(shouldRepublish ? { published_at: new Date().toISOString() } : {}),
+    }
+
+    const { error } = editingArticleId
+      ? await supabase
+          .from('ai_articles')
+          .update(articlePayload)
+          .eq('id', editingArticleId)
+      : await supabase.from('ai_articles').insert({
+          ...articlePayload,
+          author_id: userId,
+        })
 
     setSaving(false)
 
@@ -242,7 +277,34 @@ export default function AdminPage() {
     }
 
     setForm(emptyForm)
-    setMessage('Article published.')
+    setEditingArticleId(null)
+    setMessage(
+      editingArticleId
+        ? shouldRepublish
+          ? 'Article updated and republished.'
+          : 'Article updated.'
+        : 'Article published.'
+    )
+    loadArticles()
+  }
+
+  async function republishArticle(article: Article) {
+    const supabase = getSupabase()
+    if (!supabase) return
+
+    setMessage('')
+
+    const { error } = await supabase
+      .from('ai_articles')
+      .update({ published_at: new Date().toISOString() })
+      .eq('id', article.id)
+
+    if (error) {
+      setMessage(error.message)
+      return
+    }
+
+    setMessage(`"${article.title}" was republished.`)
     loadArticles()
   }
 
@@ -264,6 +326,9 @@ export default function AdminPage() {
     }
 
     setArticles(current => current.filter(item => item.id !== article.id))
+    if (editingArticleId === article.id) {
+      resetArticleForm()
+    }
     setMessage('Article deleted.')
   }
 
@@ -339,10 +404,23 @@ export default function AdminPage() {
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
           <form
-            onSubmit={publishArticle}
+            onSubmit={saveArticle}
             className="rounded-lg border border-white/10 bg-black/45 p-5 shadow-2xl shadow-green-950/20 sm:p-6"
           >
-            <h2 className="text-2xl font-medium">Write an article</h2>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <h2 className="text-2xl font-medium">
+                {editingArticleId ? 'Edit article' : 'Write an article'}
+              </h2>
+              {editingArticleId && (
+                <button
+                  type="button"
+                  onClick={resetArticleForm}
+                  className="w-fit rounded-md border border-white/15 px-4 py-2 text-sm text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+                >
+                  Cancel edit
+                </button>
+              )}
+            </div>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               <label className="block sm:col-span-2">
@@ -439,13 +517,35 @@ export default function AdminPage() {
               </label>
             </div>
 
-            <button
-              type="submit"
-              disabled={saving}
-              className="mt-6 rounded-md bg-green-400 px-5 py-3 font-medium text-black transition-colors hover:bg-green-300 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {saving ? 'Publishing...' : 'Publish Article'}
-            </button>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <button
+                type="submit"
+                name="publishAction"
+                value="save"
+                disabled={saving}
+                className="rounded-md bg-green-400 px-5 py-3 font-medium text-black transition-colors hover:bg-green-300 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {saving
+                  ? editingArticleId
+                    ? 'Saving...'
+                    : 'Publishing...'
+                  : editingArticleId
+                    ? 'Save Changes'
+                    : 'Publish Article'}
+              </button>
+
+              {editingArticleId && (
+                <button
+                  type="submit"
+                  name="publishAction"
+                  value="republish"
+                  disabled={saving}
+                  className="rounded-md border border-green-400/35 px-5 py-3 font-medium text-green-200 transition-colors hover:bg-green-400/10 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {saving ? 'Republishing...' : 'Save & Republish Now'}
+                </button>
+              )}
+            </div>
 
             {message && <p className="mt-4 text-sm text-green-300">{message}</p>}
           </form>
@@ -501,14 +601,36 @@ export default function AdminPage() {
                         <p className="mt-1 text-xs text-white/45">
                           {article.views ?? 0} views
                         </p>
+                        <p className="mt-1 text-xs text-white/45">
+                          Published{' '}
+                          {new Date(
+                            article.published_at ?? article.created_at
+                          ).toLocaleString()}
+                        </p>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => deleteArticle(article)}
-                        className="rounded-md border border-red-400/30 px-3 py-2 text-xs text-red-200 transition-colors hover:bg-red-400/10"
-                      >
-                        Delete
-                      </button>
+                      <div className="flex shrink-0 flex-col gap-2">
+                        <button
+                          type="button"
+                          onClick={() => startEditingArticle(article)}
+                          className="rounded-md border border-green-400/30 px-3 py-2 text-xs text-green-200 transition-colors hover:bg-green-400/10"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => republishArticle(article)}
+                          className="rounded-md border border-cyan-300/30 px-3 py-2 text-xs text-cyan-100 transition-colors hover:bg-cyan-300/10"
+                        >
+                          Republish
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => deleteArticle(article)}
+                          className="rounded-md border border-red-400/30 px-3 py-2 text-xs text-red-200 transition-colors hover:bg-red-400/10"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))
