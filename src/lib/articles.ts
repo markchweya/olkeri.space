@@ -29,6 +29,57 @@ export function getReadTime(content: string, suffix = 'min read') {
   return `${minutes} ${suffix}`
 }
 
+export function getArticleParagraphs(content: string) {
+  const normalizedContent = content.trim().replace(/\r\n?/g, '\n')
+
+  if (!normalizedContent) {
+    return []
+  }
+
+  if (normalizedContent.includes('\n')) {
+    const paragraphBreak = normalizedContent.includes('\n\n') ? /\n{2,}/ : /\n+/
+
+    return normalizedContent
+      .split(paragraphBreak)
+      .map(paragraph => paragraph.trim())
+      .filter(Boolean)
+  }
+
+  const sentences = normalizedContent
+    .replace(/\s+/g, ' ')
+    .split(/(?<=[.!?])\s+(?=[A-Z0-9"“‘])/)
+    .map(sentence => sentence.trim())
+    .filter(Boolean)
+
+  if (sentences.length <= 1) {
+    return [normalizedContent]
+  }
+
+  const paragraphs: string[] = []
+  let currentParagraph = ''
+
+  for (const sentence of sentences) {
+    const nextParagraph = currentParagraph
+      ? `${currentParagraph} ${sentence}`
+      : sentence
+
+    if (currentParagraph && (nextParagraph.length > 520 || currentParagraph.split(/(?<=[.!?])\s+/).length >= 3)) {
+      paragraphs.push(currentParagraph)
+      currentParagraph = sentence
+    } else {
+      currentParagraph = nextParagraph
+    }
+  }
+
+  if (currentParagraph) {
+    paragraphs.push(currentParagraph)
+  }
+
+  return paragraphs
+    .map(paragraph => paragraph.trim())
+    .filter(Boolean)
+}
+
 export const appCopy = {
   en: {
     navHome: 'Home',
