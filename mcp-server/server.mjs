@@ -8,7 +8,7 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import * as z from 'zod/v4'
 
 const DEFAULT_PORT = 8787
-const DEFAULT_PUBLISH_ENDPOINT = 'http://localhost:3000/api/articles/publish'
+const DEFAULT_PUBLISH_ENDPOINT = 'https://olkeri.space/api/articles/publish'
 const DEFAULT_ALLOWED_HOSTS = [
   'localhost',
   '127.0.0.1',
