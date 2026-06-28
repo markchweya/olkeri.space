@@ -168,7 +168,10 @@ function getServer() {
 loadEnvFile(resolve(process.cwd(), '.env.local'))
 
 const app = createMcpExpressApp()
-const port = Number.parseInt(process.env.MCP_PORT ?? `${DEFAULT_PORT}`, 10)
+const port = Number.parseInt(
+  process.env.PORT ?? process.env.MCP_PORT ?? `${DEFAULT_PORT}`,
+  10
+)
 
 app.get('/health', (_req, res) => {
   res.json({

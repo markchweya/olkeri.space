@@ -5,8 +5,6 @@ services:
     dockerfilePath: ./Dockerfile.mcp
     healthCheckPath: /health
     envVars:
-      - key: MCP_PORT
-        value: 8787
       - key: MCP_PUBLISH_ENDPOINT
         value: https://olkeri.space/api/articles/publish
       - key: MCP_CONNECTOR_TOKEN
