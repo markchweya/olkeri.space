@@ -1,0 +1,84 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Olkeri Article Publisher",
+    "version": "1.0.0",
+    "description": "Publish AI-generated articles to the Olkeri website."
+  },
+  "servers": [
+    {
+      "url": "https://olkeri.space"
+    }
+  ],
+  "paths": {
+    "/api/articles/publish": {
+      "post": {
+        "operationId": "publishArticle",
+        "summary": "Publish a blog article",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["title", "content"],
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "description": "The article title."
+                  },
+                  "slug": {
+                    "type": "string",
+                    "description": "URL slug. If omitted, the server creates one from the title."
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "The full blog article body."
+                  },
+                  "language": {
+                    "type": "string",
+                    "enum": ["en", "fr", "de"],
+                    "default": "en"
+                  },
+                  "imageUrl": {
+                    "type": "string",
+                    "description": "Optional public image URL."
+                  },
+                  "publishNow": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Set false to save as an unpublished draft."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Article published."
+          },
+          "400": {
+            "description": "Invalid article payload."
+          },
+          "401": {
+            "description": "Missing or invalid connector token."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
