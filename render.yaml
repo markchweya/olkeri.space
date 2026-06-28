@@ -7,6 +7,8 @@ services:
     envVars:
       - key: MCP_PUBLISH_ENDPOINT
         value: https://olkeri.space/api/articles/publish
+      - key: MCP_ALLOWED_HOSTS
+        value: olkeri-article-mcp.onrender.com
       - key: MCP_CONNECTOR_TOKEN
         sync: false
       - key: OLKERI_CONNECTOR_TOKEN

@@ -9,6 +9,12 @@ import * as z from 'zod/v4'
 
 const DEFAULT_PORT = 8787
 const DEFAULT_PUBLISH_ENDPOINT = 'http://localhost:3000/api/articles/publish'
+const DEFAULT_ALLOWED_HOSTS = [
+  'localhost',
+  '127.0.0.1',
+  '[::1]',
+  'olkeri-article-mcp.onrender.com',
+]
 
 function loadEnvFile(path) {
   let file
@@ -167,7 +173,13 @@ function getServer() {
 
 loadEnvFile(resolve(process.cwd(), '.env.local'))
 
-const app = createMcpExpressApp()
+const allowedHosts = (
+  process.env.MCP_ALLOWED_HOSTS?.split(',') ?? DEFAULT_ALLOWED_HOSTS
+)
+  .map(host => host.trim())
+  .filter(Boolean)
+
+const app = createMcpExpressApp({ allowedHosts })
 const port = Number.parseInt(
   process.env.PORT ?? process.env.MCP_PORT ?? `${DEFAULT_PORT}`,
   10

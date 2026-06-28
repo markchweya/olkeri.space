@@ -115,6 +115,7 @@ Render setup:
 MCP_CONNECTOR_TOKEN=use-another-long-random-token-here
 OLKERI_CONNECTOR_TOKEN=the-same-token-used-by-the-next-publish-api
 MCP_PUBLISH_ENDPOINT=https://olkeri.space/api/articles/publish
+MCP_ALLOWED_HOSTS=your-render-service.onrender.com
 ```
 
 4. After deploy, open:
