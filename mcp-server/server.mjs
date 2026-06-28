@@ -49,8 +49,16 @@ function getBearerToken(req) {
   return token
 }
 
+function getPublishEndpoint() {
+  return (process.env.MCP_PUBLISH_ENDPOINT ?? DEFAULT_PUBLISH_ENDPOINT).trim()
+}
+
+function getPublishToken() {
+  return process.env.OLKERI_CONNECTOR_TOKEN?.trim()
+}
+
 function requireMcpAuth(req, res, next) {
-  const expectedToken = process.env.MCP_CONNECTOR_TOKEN
+  const expectedToken = process.env.MCP_CONNECTOR_TOKEN?.trim()
 
   if (!expectedToken) {
     next()
@@ -116,8 +124,8 @@ function getServer() {
       },
     },
     async article => {
-      const endpoint = process.env.MCP_PUBLISH_ENDPOINT ?? DEFAULT_PUBLISH_ENDPOINT
-      const token = process.env.OLKERI_CONNECTOR_TOKEN
+      const endpoint = getPublishEndpoint()
+      const token = getPublishToken()
 
       if (!token) {
         return {
@@ -131,14 +139,33 @@ function getServer() {
         }
       }
 
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          authorization: `Bearer ${token}`,
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify(article),
-      })
+      let response
+
+      try {
+        response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            authorization: `Bearer ${token}`,
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify(article),
+        })
+      } catch (error) {
+        console.error('Publish endpoint fetch failed:', {
+          endpoint,
+          message: error instanceof Error ? error.message : String(error),
+        })
+
+        return {
+          isError: true,
+          content: [
+            {
+              type: 'text',
+              text: `Could not reach the Olkeri publish endpoint at ${endpoint}. Check MCP_PUBLISH_ENDPOINT on Render and redeploy.`,
+            },
+          ],
+        }
+      }
 
       const result = await response.json().catch(() => ({}))
 
@@ -186,10 +213,21 @@ const port = Number.parseInt(
 )
 
 app.get('/health', (_req, res) => {
+  let publishEndpoint
+
+  try {
+    const url = new URL(getPublishEndpoint())
+    publishEndpoint = `${url.protocol}//${url.host}${url.pathname}`
+  } catch {
+    publishEndpoint = 'invalid'
+  }
+
   res.json({
     ok: true,
     name: 'olkeri-article-publisher',
     mcp: '/mcp',
+    publishEndpoint,
+    hasPublishToken: Boolean(getPublishToken()),
   })
 })
 
