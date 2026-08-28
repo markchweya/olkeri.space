@@ -13,7 +13,7 @@ Each run:
    AI stories published since the last run, from every region (Americas,
    Europe, Asia, Africa, Middle East, Oceania).
 2. **Dedupes** — reads the most recent published slugs/titles/sources from the
-   public Supabase REST API and skips stories already covered.
+   site's public API and skips stories already covered.
 3. **Writes** — for each selected story, writes an **original** English news
    article (never copied text; reporting rewritten fully in our own words, with
    the primary source credited), then full French and German versions.
@@ -105,19 +105,16 @@ shared `translationGroupId` (accepted as input, generated when omitted).
 ## Dedupe query (public, read-only)
 
 ```
-GET https://cxgqiutgebdovtiralom.supabase.co/rest/v1/ai_articles
-    ?select=slug,title,source_url
-    &language=eq.en
-    &order=published_at.desc
-    &limit=200
-Header: apikey: <NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY>
+GET https://olkeri.space/api/articles/recent?language=en&limit=200
 ```
+
+Returns `{ articles: [{ slug, title, source_url, published_at }] }`.
 
 ## Required environment
 
-- On the site host (Vercel): `OLKERI_CONNECTOR_TOKEN`,
-  `SUPABASE_SERVICE_ROLE_KEY`.
+- On the site host (Vercel): `DATABASE_URL`, `OLKERI_CONNECTOR_TOKEN`,
+  `SESSION_SECRET`, `ADMIN_PASSWORD_HASH` — see
+  `docs/security-and-database.md`.
 - In the claude.ai/code environment that runs the Routine:
   `OLKERI_CONNECTOR_TOKEN` (same value as on the site host).
-- One-time database migration: run `supabase/ai_articles_news_upgrade.sql` in
-  the Supabase SQL editor.
+- One-time database setup: `psql "$DATABASE_URL" -f db/schema.sql`.
