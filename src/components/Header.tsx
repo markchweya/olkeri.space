@@ -37,9 +37,9 @@ export default function Header() {
             </Link>
           )}
 
-          {pathname !== '/blog' && (
+          {pathname !== `/${appLanguage}` && (
             <Link
-              href="/blog"
+              href={`/${appLanguage}`}
               className="text-white hover:text-green-400 transition-colors duration-200"
             >
               {copy.navBlog}
