@@ -17,6 +17,53 @@ export type Article = {
   updated_at: string
   published_at: string | null
   views: number | null
+  translation_group_id?: string | null
+  summary?: string | null
+  category?: string | null
+  region?: string | null
+  tags?: string[] | null
+  source_name?: string | null
+  source_url?: string | null
+  image_credit?: string | null
+}
+
+export const newsCategories = [
+  'companies',
+  'research',
+  'policy',
+  'business',
+  'hardware',
+  'science',
+  'society',
+] as const
+
+export type NewsCategory = (typeof newsCategories)[number]
+
+export const newsRegions = [
+  'global',
+  'americas',
+  'europe',
+  'asia',
+  'africa',
+  'middle-east',
+  'oceania',
+] as const
+
+export type NewsRegion = (typeof newsRegions)[number]
+
+export function getArticleExcerpt(
+  article: Pick<Article, 'content'> & { summary?: string | null },
+  maxLength = 180
+) {
+  const summary = article.summary?.trim()
+  const base = summary || article.content.trim().replace(/\s+/g, ' ')
+
+  if (base.length <= maxLength) return base
+
+  const clipped = base.slice(0, maxLength)
+  const lastSpace = clipped.lastIndexOf(' ')
+
+  return `${clipped.slice(0, lastSpace > 60 ? lastSpace : maxLength)}…`
 }
 
 export function getReadTime(content: string, suffix = 'min read') {
@@ -100,17 +147,57 @@ export const appCopy = {
     loading: 'Loading articles...',
     readTimeSuffix: 'min read',
     views: 'views',
+    news: {
+      brand: 'AI News',
+      tagline: 'AI news from around the world — updated every day.',
+      topStory: 'Top story',
+      latest: 'Latest AI news',
+      mostRead: 'Most read',
+      moreNews: 'More AI news',
+      source: 'Source',
+      imageCredit: 'Image',
+      readIn: 'Read this story in',
+      older: 'Older news',
+      newer: 'Newer news',
+      backToNews: 'All AI news',
+    },
+    categories: {
+      companies: 'Companies',
+      research: 'Research',
+      policy: 'Policy & Regulation',
+      business: 'Business',
+      hardware: 'Hardware & Chips',
+      science: 'Science',
+      society: 'Society & Culture',
+    },
+    regions: {
+      global: 'Global',
+      americas: 'Americas',
+      europe: 'Europe',
+      asia: 'Asia',
+      africa: 'Africa',
+      'middle-east': 'Middle East',
+      oceania: 'Oceania',
+    },
+    home: {
+      headline: 'AI news from around the world',
+      sub: 'Original reporting on artificial intelligence — companies, research, policy, chips and more — published every day in English, French and German.',
+      ctaNews: 'Latest AI news',
+      ctaContact: 'Contact us',
+      editions: 'Read Olkeri in your language',
+      topToday: "Today's top stories",
+    },
     contact: {
-      title: 'Let us Build Something',
-      intro: 'Tell us about your idea. We will respond within 24 hours with a clear next step.',
+      title: 'Get in Touch',
+      intro: 'A story tip, a correction, a partnership — tell us. We respond within 24 hours.',
       name: 'Your Name',
       email: 'Your Email',
-      message: 'Tell us about your project',
+      message: 'Your message',
       submit: 'Send Message',
     },
     startProject: {
-      title: 'Start Your Project',
-      intro: 'Let us build something exceptional. Tell us about your vision, and we will turn it into a scalable digital system.',
+      title: 'Have a story or a tip?',
+      intro: 'Olkeri covers AI news worldwide, every day, in three languages. Send us story tips, corrections or partnership requests.',
       cta: 'Contact Us',
     },
     legalLabels: {
@@ -141,17 +228,57 @@ export const appCopy = {
     loading: 'Chargement des articles...',
     readTimeSuffix: 'min de lecture',
     views: 'lectures',
+    news: {
+      brand: 'Actus IA',
+      tagline: "L'actualité de l'IA dans le monde entier — mise à jour chaque jour.",
+      topStory: 'À la une',
+      latest: 'Dernières actus IA',
+      mostRead: 'Les plus lus',
+      moreNews: "Plus d'actus IA",
+      source: 'Source',
+      imageCredit: 'Image',
+      readIn: 'Lire cet article en',
+      older: 'Actus plus anciennes',
+      newer: 'Actus plus récentes',
+      backToNews: 'Toutes les actus IA',
+    },
+    categories: {
+      companies: 'Entreprises',
+      research: 'Recherche',
+      policy: 'Politique & Régulation',
+      business: 'Économie',
+      hardware: 'Matériel & Puces',
+      science: 'Science',
+      society: 'Société & Culture',
+    },
+    regions: {
+      global: 'Monde',
+      americas: 'Amériques',
+      europe: 'Europe',
+      asia: 'Asie',
+      africa: 'Afrique',
+      'middle-east': 'Moyen-Orient',
+      oceania: 'Océanie',
+    },
+    home: {
+      headline: "L'actualité de l'IA dans le monde entier",
+      sub: "Des articles originaux sur l'intelligence artificielle — entreprises, recherche, politique, puces et plus — publiés chaque jour en anglais, français et allemand.",
+      ctaNews: 'Dernières actus IA',
+      ctaContact: 'Nous contacter',
+      editions: 'Lire Olkeri dans votre langue',
+      topToday: 'À la une aujourd’hui',
+    },
     contact: {
-      title: 'Construisons quelque chose',
-      intro: 'Parlez-nous de votre idee. Nous repondrons sous 24 heures avec une prochaine etape claire.',
+      title: 'Contactez-nous',
+      intro: 'Une info, une correction, un partenariat — écrivez-nous. Nous répondons sous 24 heures.',
       name: 'Votre nom',
       email: 'Votre e-mail',
-      message: 'Parlez-nous de votre projet',
+      message: 'Votre message',
       submit: 'Envoyer le message',
     },
     startProject: {
-      title: 'Demarrez votre projet',
-      intro: 'Construisons quelque chose d exceptionnel. Parlez-nous de votre vision et nous la transformerons en systeme numerique evolutif.',
+      title: 'Une info à partager ?',
+      intro: "Olkeri couvre l'actualité de l'IA dans le monde entier, chaque jour, en trois langues. Envoyez-nous vos infos, corrections ou demandes de partenariat.",
       cta: 'Nous contacter',
     },
     legalLabels: {
@@ -182,17 +309,57 @@ export const appCopy = {
     loading: 'Artikel werden geladen...',
     readTimeSuffix: 'Min. Lesezeit',
     views: 'Aufrufe',
+    news: {
+      brand: 'KI-News',
+      tagline: 'KI-Nachrichten aus aller Welt — jeden Tag aktualisiert.',
+      topStory: 'Top-Meldung',
+      latest: 'Neueste KI-Nachrichten',
+      mostRead: 'Meistgelesen',
+      moreNews: 'Weitere KI-Nachrichten',
+      source: 'Quelle',
+      imageCredit: 'Bild',
+      readIn: 'Diesen Artikel lesen auf',
+      older: 'Ältere Nachrichten',
+      newer: 'Neuere Nachrichten',
+      backToNews: 'Alle KI-Nachrichten',
+    },
+    categories: {
+      companies: 'Unternehmen',
+      research: 'Forschung',
+      policy: 'Politik & Regulierung',
+      business: 'Wirtschaft',
+      hardware: 'Hardware & Chips',
+      science: 'Wissenschaft',
+      society: 'Gesellschaft & Kultur',
+    },
+    regions: {
+      global: 'Global',
+      americas: 'Amerika',
+      europe: 'Europa',
+      asia: 'Asien',
+      africa: 'Afrika',
+      'middle-east': 'Naher Osten',
+      oceania: 'Ozeanien',
+    },
+    home: {
+      headline: 'KI-Nachrichten aus aller Welt',
+      sub: 'Originalberichte über künstliche Intelligenz — Unternehmen, Forschung, Politik, Chips und mehr — jeden Tag auf Englisch, Französisch und Deutsch.',
+      ctaNews: 'Neueste KI-Nachrichten',
+      ctaContact: 'Kontakt aufnehmen',
+      editions: 'Olkeri in Ihrer Sprache lesen',
+      topToday: 'Die Top-Meldungen von heute',
+    },
     contact: {
-      title: 'Lassen Sie uns etwas bauen',
-      intro: 'Erzahlen Sie uns von Ihrer Idee. Wir antworten innerhalb von 24 Stunden mit einem klaren nachsten Schritt.',
+      title: 'Kontakt aufnehmen',
+      intro: 'Ein Hinweis, eine Korrektur, eine Partnerschaft — schreiben Sie uns. Wir antworten innerhalb von 24 Stunden.',
       name: 'Ihr Name',
       email: 'Ihre E-Mail',
-      message: 'Erzahlen Sie uns von Ihrem Projekt',
+      message: 'Ihre Nachricht',
       submit: 'Nachricht senden',
     },
     startProject: {
-      title: 'Starten Sie Ihr Projekt',
-      intro: 'Lassen Sie uns etwas Aussergewohnliches bauen. Erzahlen Sie uns von Ihrer Vision, und wir machen daraus ein skalierbares digitales System.',
+      title: 'Einen Hinweis für uns?',
+      intro: 'Olkeri berichtet jeden Tag über KI-Nachrichten aus aller Welt — in drei Sprachen. Senden Sie uns Hinweise, Korrekturen oder Partnerschaftsanfragen.',
       cta: 'Kontakt aufnehmen',
     },
     legalLabels: {
@@ -235,4 +402,39 @@ export function createSlug(value: string) {
 
 export function getArticlePath(article: Pick<Article, 'language' | 'slug'>) {
   return `/${article.language}/${article.slug}`
+}
+
+export function getCategoryLabel(
+  category: string | null | undefined,
+  appLanguage: ArticleLanguage
+) {
+  if (!category) return null
+
+  const labels = appCopy[appLanguage].categories as Record<string, string>
+
+  return labels[category] ?? category
+}
+
+export function getRegionLabel(
+  region: string | null | undefined,
+  appLanguage: ArticleLanguage
+) {
+  if (!region) return null
+
+  const labels = appCopy[appLanguage].regions as Record<string, string>
+
+  return labels[region] ?? region
+}
+
+export function formatArticleDate(article: Article, appLanguage: ArticleLanguage) {
+  const localeMap: Record<ArticleLanguage, string> = {
+    en: 'en-GB',
+    fr: 'fr-FR',
+    de: 'de-DE',
+  }
+
+  return new Date(article.published_at ?? article.created_at).toLocaleDateString(
+    localeMap[appLanguage],
+    { day: 'numeric', month: 'long', year: 'numeric' }
+  )
 }

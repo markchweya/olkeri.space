@@ -1,3 +1,13 @@
+# Self-hosted, password-protected Postgres for Olkeri AI News.
+# The connection string (with its password) appears under the database's
+# "Connections" tab in Render — set it as DATABASE_URL on the site host.
+# Upgrade `plan` for production durability (the free plan expires).
+databases:
+  - name: olkeri-postgres
+    databaseName: olkeri
+    user: olkeri
+    plan: free
+
 services:
   - type: web
     name: olkeri-article-mcp

@@ -1,23 +1,31 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
+
 import {
   articleLanguages,
   createSlug,
   getArticlePath,
   getLanguageName,
   getReadTime,
+  newsCategories,
+  newsRegions,
   type Article,
   type ArticleLanguage,
 } from '@/lib/articles'
-import { getSupabase } from '@/lib/supabase'
 
 type ArticleForm = {
   title: string
   slug: string
   content: string
   language: ArticleLanguage
+  summary: string
+  category: string
+  region: string
+  sourceName: string
+  sourceUrl: string
   imageUrl: string
+  imageCredit: string
 }
 
 const emptyForm: ArticleForm = {
@@ -25,13 +33,32 @@ const emptyForm: ArticleForm = {
   slug: '',
   content: '',
   language: 'en',
+  summary: '',
+  category: '',
+  region: '',
+  sourceName: '',
+  sourceUrl: '',
   imageUrl: '',
+  imageCredit: '',
+}
+
+async function api<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(path, {
+    ...init,
+    headers: { 'Content-Type': 'application/json', ...init?.headers },
+  })
+  const data = (await response.json().catch(() => ({}))) as T & { error?: string }
+
+  if (!response.ok) {
+    throw new Error(data.error ?? `Request failed (${response.status})`)
+  }
+
+  return data
 }
 
 export default function AdminPage() {
-  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [userId, setUserId] = useState<string | null>(null)
+  const [authenticated, setAuthenticated] = useState(false)
   const [authLoading, setAuthLoading] = useState(true)
   const [form, setForm] = useState<ArticleForm>(emptyForm)
   const [editingArticleId, setEditingArticleId] = useState<string | null>(null)
@@ -40,43 +67,27 @@ export default function AdminPage() {
   const [languageFilter, setLanguageFilter] = useState<ArticleLanguage | 'all'>('all')
   const [message, setMessage] = useState('')
   const [saving, setSaving] = useState(false)
-  const [uploading, setUploading] = useState(false)
 
   const loadArticles = useCallback(async () => {
-    const supabase = getSupabase()
-    if (!supabase) return
-
-    const { data, error } = await supabase
-      .from('ai_articles')
-      .select('*')
-      .order('published_at', { ascending: false })
-
-    if (error) {
-      setMessage(error.message)
-      return
+    try {
+      const data = await api<{ articles: Article[] }>('/api/admin/articles')
+      setArticles(data.articles)
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Could not load articles.')
     }
-
-    setArticles((data ?? []) as Article[])
   }, [])
 
   useEffect(() => {
     let mounted = true
 
-    async function loadSession() {
-      const supabase = getSupabase()
-      if (!supabase) {
-        setAuthLoading(false)
-        return
-      }
-
-      const { data } = await supabase.auth.getUser()
-      if (mounted) {
-        setUserId(data.user?.id ?? null)
-        setAuthLoading(false)
-      }
-    }
-
-    loadSession()
+    api<{ authenticated: boolean }>('/api/admin/session')
+      .then(data => {
+        if (mounted) setAuthenticated(data.authenticated)
+      })
+      .catch(() => undefined)
+      .finally(() => {
+        if (mounted) setAuthLoading(false)
+      })
 
     return () => {
       mounted = false
@@ -84,14 +95,14 @@ export default function AdminPage() {
   }, [])
 
   useEffect(() => {
-    if (!userId) return
+    if (!authenticated) return
 
     const timeout = window.setTimeout(() => {
       loadArticles()
     }, 0)
 
     return () => window.clearTimeout(timeout)
-  }, [loadArticles, userId])
+  }, [authenticated, loadArticles])
 
   const filteredArticles = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase()
@@ -113,33 +124,22 @@ export default function AdminPage() {
     event.preventDefault()
     setMessage('')
 
-    const supabase = getSupabase()
-    if (!supabase) {
-      setMessage('Supabase is not configured.')
-      return
+    try {
+      await api('/api/admin/login', {
+        method: 'POST',
+        body: JSON.stringify({ password }),
+      })
+      setAuthenticated(true)
+      setPassword('')
+      setMessage('Signed in.')
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Sign-in failed.')
     }
-
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    if (error) {
-      setMessage(error.message)
-      return
-    }
-
-    setUserId(data.user?.id ?? null)
-    setPassword('')
-    setMessage('Signed in.')
   }
 
   async function signOut() {
-    const supabase = getSupabase()
-    if (!supabase) return
-
-    await supabase.auth.signOut()
-    setUserId(null)
+    await api('/api/admin/logout', { method: 'POST' }).catch(() => undefined)
+    setAuthenticated(false)
     setArticles([])
     setMessage('Signed out.')
   }
@@ -159,7 +159,13 @@ export default function AdminPage() {
       slug: article.slug,
       content: article.content,
       language: article.language,
+      summary: article.summary ?? '',
+      category: article.category ?? '',
+      region: article.region ?? '',
+      sourceName: article.source_name ?? '',
+      sourceUrl: article.source_url ?? '',
       imageUrl: article.image_url ?? '',
+      imageCredit: article.image_credit ?? '',
     })
     setMessage(`Editing "${article.title}".`)
   }
@@ -170,75 +176,12 @@ export default function AdminPage() {
     setMessage('')
   }
 
-  async function uploadImage(file: File) {
-    setMessage('')
-
-    if (!userId) {
-      setMessage('Sign in before uploading an image.')
-      return
-    }
-
-    if (!file.type.startsWith('image/')) {
-      setMessage('Please upload an image file.')
-      return
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      setMessage('Image must be 5MB or smaller.')
-      return
-    }
-
-    const supabase = getSupabase()
-    if (!supabase) {
-      setMessage('Supabase is not configured.')
-      return
-    }
-
-    setUploading(true)
-
-    const extension = file.name.split('.').pop()?.toLowerCase() ?? 'jpg'
-    const baseSlug = createSlug(form.slug || form.title || 'article-image')
-    const path = `${userId}/${Date.now()}-${baseSlug}.${extension}`
-
-    const { error } = await supabase.storage
-      .from('article-images')
-      .upload(path, file, {
-        cacheControl: '31536000',
-        upsert: false,
-      })
-
-    if (error) {
-      setUploading(false)
-      setMessage(error.message)
-      return
-    }
-
-    const { data } = supabase.storage
-      .from('article-images')
-      .getPublicUrl(path)
-
-    setForm(current => ({ ...current, imageUrl: data.publicUrl }))
-    setUploading(false)
-    setMessage('Image uploaded. The photo URL has been added.')
-  }
-
   async function saveArticle(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setMessage('')
 
-    if (!userId) {
-      setMessage(`Sign in before ${editingArticleId ? 'saving' : 'publishing'}.`)
-      return
-    }
-
     if (!form.title.trim() || !form.slug.trim() || !form.content.trim()) {
       setMessage('Title, slug, and article content are required.')
-      return
-    }
-
-    const supabase = getSupabase()
-    if (!supabase) {
-      setMessage('Supabase is not configured.')
       return
     }
 
@@ -250,86 +193,79 @@ export default function AdminPage() {
     const shouldRepublish =
       !editingArticleId || submitter?.value === 'republish'
 
-    const articlePayload = {
+    const payload = {
       title: form.title.trim(),
       slug: createSlug(form.slug),
       content: form.content.trim(),
       language: form.language,
-      image_url: form.imageUrl.trim() || null,
-      ...(shouldRepublish ? { published_at: new Date().toISOString() } : {}),
+      summary: form.summary.trim() || undefined,
+      category: form.category || undefined,
+      region: form.region || undefined,
+      sourceName: form.sourceName.trim() || undefined,
+      sourceUrl: form.sourceUrl.trim() || undefined,
+      imageUrl: form.imageUrl.trim() || undefined,
+      imageCredit: form.imageCredit.trim() || undefined,
     }
 
-    const { error } = editingArticleId
-      ? await supabase
-          .from('ai_articles')
-          .update(articlePayload)
-          .eq('id', editingArticleId)
-      : await supabase.from('ai_articles').insert({
-          ...articlePayload,
-          author_id: userId,
+    try {
+      if (editingArticleId) {
+        await api(`/api/admin/articles/${editingArticleId}`, {
+          method: 'PUT',
+          body: JSON.stringify({ ...payload, republish: shouldRepublish }),
         })
+      } else {
+        await api('/api/admin/articles', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        })
+      }
 
-    setSaving(false)
-
-    if (error) {
-      setMessage(error.message)
-      return
+      setForm(emptyForm)
+      setEditingArticleId(null)
+      setMessage(
+        editingArticleId
+          ? shouldRepublish
+            ? 'Article updated and republished.'
+            : 'Article updated.'
+          : 'Article published.'
+      )
+      loadArticles()
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Save failed.')
+    } finally {
+      setSaving(false)
     }
-
-    setForm(emptyForm)
-    setEditingArticleId(null)
-    setMessage(
-      editingArticleId
-        ? shouldRepublish
-          ? 'Article updated and republished.'
-          : 'Article updated.'
-        : 'Article published.'
-    )
-    loadArticles()
   }
 
   async function republishArticle(article: Article) {
-    const supabase = getSupabase()
-    if (!supabase) return
-
     setMessage('')
 
-    const { error } = await supabase
-      .from('ai_articles')
-      .update({ published_at: new Date().toISOString() })
-      .eq('id', article.id)
-
-    if (error) {
-      setMessage(error.message)
-      return
+    try {
+      await api(`/api/admin/articles/${article.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ republish: true }),
+      })
+      setMessage(`"${article.title}" was republished.`)
+      loadArticles()
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Republish failed.')
     }
-
-    setMessage(`"${article.title}" was republished.`)
-    loadArticles()
   }
 
   async function deleteArticle(article: Article) {
     const confirmed = window.confirm(`Delete "${article.title}"?`)
     if (!confirmed) return
 
-    const supabase = getSupabase()
-    if (!supabase) return
-
-    const { error } = await supabase
-      .from('ai_articles')
-      .delete()
-      .eq('id', article.id)
-
-    if (error) {
-      setMessage(error.message)
-      return
+    try {
+      await api(`/api/admin/articles/${article.id}`, { method: 'DELETE' })
+      setArticles(current => current.filter(item => item.id !== article.id))
+      if (editingArticleId === article.id) {
+        resetArticleForm()
+      }
+      setMessage('Article deleted.')
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Delete failed.')
     }
-
-    setArticles(current => current.filter(item => item.id !== article.id))
-    if (editingArticleId === article.id) {
-      resetArticleForm()
-    }
-    setMessage('Article deleted.')
   }
 
   if (authLoading) {
@@ -340,7 +276,7 @@ export default function AdminPage() {
     )
   }
 
-  if (!userId) {
+  if (!authenticated) {
     return (
       <main className="min-h-screen bg-[radial-gradient(circle_at_top,#021a12_0%,#000000_70%)] px-5 pb-20 pt-32 text-white sm:px-8">
         <div className="mx-auto max-w-md rounded-lg border border-white/10 bg-black/45 p-6 shadow-2xl shadow-green-950/20">
@@ -349,21 +285,12 @@ export default function AdminPage() {
 
           <form onSubmit={signIn} className="mt-8 space-y-4">
             <label className="block">
-              <span className="text-sm text-white/65">Email</span>
-              <input
-                type="email"
-                value={email}
-                onChange={event => setEmail(event.target.value)}
-                className="mt-2 w-full rounded-md border border-white/15 bg-black/40 px-4 py-3 text-white outline-none transition-colors focus:border-green-400"
-              />
-            </label>
-
-            <label className="block">
               <span className="text-sm text-white/65">Password</span>
               <input
                 type="password"
                 value={password}
                 onChange={event => setPassword(event.target.value)}
+                autoComplete="current-password"
                 className="mt-2 w-full rounded-md border border-white/15 bg-black/40 px-4 py-3 text-white outline-none transition-colors focus:border-green-400"
               />
             </label>
@@ -387,7 +314,7 @@ export default function AdminPage() {
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-sm text-green-300/80">aimploy.olkeri.space</p>
+            <p className="text-sm text-green-300/80">Olkeri · AI News</p>
             <h1 className="mt-3 text-4xl font-medium sm:text-6xl">
               Article Admin
             </h1>
@@ -468,7 +395,79 @@ export default function AdminPage() {
                 </select>
               </label>
 
+              <label className="block">
+                <span className="text-sm text-white/65">Category</span>
+                <select
+                  value={form.category}
+                  onChange={event =>
+                    setForm(current => ({ ...current, category: event.target.value }))
+                  }
+                  className="mt-2 w-full rounded-md border border-white/15 bg-black/40 px-4 py-3 text-white outline-none transition-colors focus:border-green-400"
+                >
+                  <option value="">No category</option>
+                  {newsCategories.map(category => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label className="block">
+                <span className="text-sm text-white/65">Region</span>
+                <select
+                  value={form.region}
+                  onChange={event =>
+                    setForm(current => ({ ...current, region: event.target.value }))
+                  }
+                  className="mt-2 w-full rounded-md border border-white/15 bg-black/40 px-4 py-3 text-white outline-none transition-colors focus:border-green-400"
+                >
+                  <option value="">No region</option>
+                  {newsRegions.map(region => (
+                    <option key={region} value={region}>
+                      {region}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
               <label className="block sm:col-span-2">
+                <span className="text-sm text-white/65">Summary</span>
+                <input
+                  value={form.summary}
+                  onChange={event =>
+                    setForm(current => ({ ...current, summary: event.target.value }))
+                  }
+                  className="mt-2 w-full rounded-md border border-white/15 bg-black/40 px-4 py-3 text-white outline-none transition-colors focus:border-green-400"
+                  placeholder="One-sentence summary shown on cards and in search results"
+                />
+              </label>
+
+              <label className="block">
+                <span className="text-sm text-white/65">Source name</span>
+                <input
+                  value={form.sourceName}
+                  onChange={event =>
+                    setForm(current => ({ ...current, sourceName: event.target.value }))
+                  }
+                  className="mt-2 w-full rounded-md border border-white/15 bg-black/40 px-4 py-3 text-white outline-none transition-colors focus:border-green-400"
+                  placeholder="e.g. NVIDIA Newsroom"
+                />
+              </label>
+
+              <label className="block">
+                <span className="text-sm text-white/65">Source URL</span>
+                <input
+                  value={form.sourceUrl}
+                  onChange={event =>
+                    setForm(current => ({ ...current, sourceUrl: event.target.value }))
+                  }
+                  className="mt-2 w-full rounded-md border border-white/15 bg-black/40 px-4 py-3 text-white outline-none transition-colors focus:border-green-400"
+                  placeholder="https://..."
+                />
+              </label>
+
+              <label className="block">
                 <span className="text-sm text-white/65">Photo URL</span>
                 <input
                   value={form.imageUrl}
@@ -479,28 +478,20 @@ export default function AdminPage() {
                   placeholder="https://..."
                 />
                 <span className="mt-2 block text-xs leading-5 text-white/45">
-                  Use a 16:9 image for best results. Recommended size: 1600x900px. Minimum: 1200x675px.
+                  Use a 16:9 image for best results. Recommended: 1600x900px.
                 </span>
               </label>
 
-              <label className="block sm:col-span-2">
-                <span className="text-sm text-white/65">Upload photo</span>
+              <label className="block">
+                <span className="text-sm text-white/65">Image credit</span>
                 <input
-                  type="file"
-                  accept="image/png,image/jpeg,image/webp"
-                  disabled={uploading}
-                  onChange={event => {
-                    const file = event.target.files?.[0]
-                    if (file) {
-                      uploadImage(file)
-                    }
-                    event.target.value = ''
-                  }}
-                  className="mt-2 w-full rounded-md border border-white/15 bg-black/40 px-4 py-3 text-white file:mr-4 file:rounded-md file:border-0 file:bg-green-400 file:px-4 file:py-2 file:text-sm file:font-medium file:text-black disabled:cursor-not-allowed disabled:opacity-60"
+                  value={form.imageCredit}
+                  onChange={event =>
+                    setForm(current => ({ ...current, imageCredit: event.target.value }))
+                  }
+                  className="mt-2 w-full rounded-md border border-white/15 bg-black/40 px-4 py-3 text-white outline-none transition-colors focus:border-green-400"
+                  placeholder="e.g. Unsplash / Jane Doe"
                 />
-                <span className="mt-2 block text-xs leading-5 text-white/45">
-                  JPG, PNG, or WebP. Max 5MB. Uploaded images are cropped responsively to 16:9 in cards and article pages.
-                </span>
               </label>
 
               <label className="block sm:col-span-2">
