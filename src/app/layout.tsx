@@ -8,9 +8,23 @@ const spaceGrotesk = Space_Grotesk({
   weight: ['400', '500', '600', '700'],
 })
 
-export const metadata = {
-  title: 'olkeri.space',
-  description: 'Web development. Systems. AI. Applications.',
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  metadataBase: new URL('https://olkeri.space'),
+  title: {
+    default: 'Olkeri — AI News',
+    template: '%s | Olkeri AI News',
+  },
+  description:
+    'Daily artificial-intelligence news from around the world, in English, French and German.',
+  openGraph: {
+    siteName: 'Olkeri AI News',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
 }
 
 export default function RootLayout({
@@ -38,7 +52,7 @@ export default function RootLayout({
             <footer className="py-8 text-sm border-t border-white/10">
               <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
                 <p className="text-white/70">
-                  © {new Date().getFullYear()} olkeri.space
+                  © {new Date().getFullYear()} Olkeri — AI News · olkeri.space
                 </p>
 
                 <FooterLinks />

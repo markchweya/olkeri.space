@@ -1,14 +1,5 @@
-
-import Hero from "@/components/Hero";
-import StartProjectSection from "@/components/StartProjectSection";
-
-import Footer from '@/components/Footer'
+import { redirect } from 'next/navigation'
 
 export default function Home() {
-  return (
-    <>
-      <Hero />
-      <StartProjectSection />
-    </>
-  );
+  redirect('/en')
 }

@@ -25,7 +25,7 @@ export default function ArticleFallbackImage({
       ) : (
         <div className="absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_top,#063a28_0%,#020403_72%)] px-6 text-center">
           <span className="text-3xl font-semibold tracking-wide text-green-300 sm:text-4xl">
-            olkeri.space
+            OLKERI · AI NEWS
           </span>
         </div>
       )}

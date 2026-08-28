@@ -82,8 +82,8 @@ export default function BlogListing({ initialLanguage }: BlogListingProps) {
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-sm text-green-300/80">
-              aimploy.olkeri.space
+            <p className="text-sm uppercase tracking-[0.2em] text-green-300/80">
+              Olkeri · {copy.news.brand}
             </p>
             <h1 className="mt-3 text-4xl font-medium leading-tight sm:text-6xl">
               {pageTitle}
@@ -159,7 +159,7 @@ export default function BlogListing({ initialLanguage }: BlogListingProps) {
                     {article.title}
                   </h2>
                   <p className="mt-4 line-clamp-3 text-sm leading-6 text-white/62">
-                    {article.content}
+                    {article.summary?.trim() || article.content}
                   </p>
                 </div>
               </Link>
