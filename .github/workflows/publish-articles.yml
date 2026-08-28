@@ -1,0 +1,73 @@
+name: Publish articles
+
+# Publishes prepared article batches to the live site.
+#
+# Automatic: any push to main that adds or changes a file in content/
+# publishes the changed batches.
+# Manual: run this workflow and give it a file (and optional slice).
+#
+# Requires one repository secret: OLKERI_CONNECTOR_TOKEN
+# (Settings -> Secrets and variables -> Actions -> New repository secret),
+# set to the same value as OLKERI_CONNECTOR_TOKEN on the site host.
+
+on:
+  push:
+    branches: [main]
+    paths: ['content/**.json']
+  workflow_dispatch:
+    inputs:
+      file:
+        description: 'Batch file to publish (e.g. content/2026-08-29-evergreen.json)'
+        required: true
+        type: string
+      start:
+        description: 'Skip this many articles'
+        required: false
+        default: '0'
+        type: string
+      limit:
+        description: 'Publish at most this many (0 = all)'
+        required: false
+        default: '0'
+        type: string
+      dry_run:
+        description: 'Validate only, publish nothing'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Determine batch files
+        id: files
+        run: |
+          if [ -n "${{ inputs.file }}" ]; then
+            echo "list=${{ inputs.file }}" >> "$GITHUB_OUTPUT"
+          else
+            changed=$(git diff --name-only --diff-filter=AM HEAD^ HEAD -- 'content/*.json' | tr '\n' ' ')
+            echo "list=$changed" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish
+        if: steps.files.outputs.list != ''
+        env:
+          OLKERI_CONNECTOR_TOKEN: ${{ secrets.OLKERI_CONNECTOR_TOKEN }}
+        run: |
+          for file in ${{ steps.files.outputs.list }}; do
+            echo "::group::$file"
+            node scripts/publish-batch.mjs "$file" \
+              --start "${{ inputs.start || '0' }}" \
+              --limit "${{ inputs.limit || '0' }}" \
+              ${{ inputs.dry_run == true && '--dry-run' || '' }}
+            echo "::endgroup::"
+          done
