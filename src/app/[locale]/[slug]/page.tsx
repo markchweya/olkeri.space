@@ -22,8 +22,8 @@ import {
   getArticleTranslations,
   getLatestArticles,
   getMostReadArticles,
+  incrementArticleViews,
 } from '@/lib/news'
-import { getSupabase } from '@/lib/supabase'
 
 type ArticlePageProps = {
   params: Promise<{ locale: string; slug: string }>
@@ -91,13 +91,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     getLatestArticles(language, 7),
   ])
 
-  const supabase = getSupabase()
-
-  if (supabase) {
-    await supabase.rpc('increment_ai_article_views', {
-      article_id: article.id,
-    })
-  }
+  await incrementArticleViews(article.id)
 
   const mostReadOther = mostRead
     .filter(other => other.id !== article.id)

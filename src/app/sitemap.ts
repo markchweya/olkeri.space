@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 
 import { articleLanguages } from '@/lib/articles'
-import { getSupabase } from '@/lib/supabase'
+import { getSitemapArticles } from '@/lib/news'
 
 export const revalidate = 3600
 
@@ -21,18 +21,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   ]
 
-  const supabase = getSupabase()
+  const articles = await getSitemapArticles(5000)
 
-  if (!supabase) return entries
-
-  const { data } = await supabase
-    .from('ai_articles')
-    .select('slug,language,updated_at,published_at')
-    .not('published_at', 'is', null)
-    .order('published_at', { ascending: false })
-    .limit(5000)
-
-  for (const article of data ?? []) {
+  for (const article of articles) {
     entries.push({
       url: `${BASE_URL}/${article.language}/${article.slug}`,
       lastModified: article.updated_at ?? article.published_at ?? undefined,
