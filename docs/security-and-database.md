@@ -5,8 +5,23 @@ password-protected Postgres database that you own.
 
 ## Database
 
-- Schema: `db/schema.sql` — apply once with
-  `psql "$DATABASE_URL" -f db/schema.sql`.
+The database is plain Postgres — you own it wherever it runs. Two ways to
+run it:
+
+1. **Fully self-hosted (your own server / VPS)**:
+   `POSTGRES_PASSWORD=your-strong-password docker compose up -d` starts
+   Postgres in Docker with the schema applied automatically and data in a
+   persistent volume. Your `DATABASE_URL` is then
+   `postgres://olkeri:your-strong-password@<server-ip>:5432/olkeri`.
+   Note: if the site runs on Vercel, Vercel's servers must be able to
+   reach the database over the network — open port 5432 deliberately and
+   keep the strong password, or run the site on the same server.
+2. **Managed Postgres you own** (Render via `render.yaml`, or any
+   provider): they run the machine, but the database, its data, and its
+   password are yours; copy the connection string they show you.
+
+- Schema: `db/schema.sql` — applied automatically by docker compose, or
+  apply once with `psql "$DATABASE_URL" -f db/schema.sql`.
 - The app connects through the `DATABASE_URL` connection string (which
   carries the database password). Optional `DATABASE_SSL`:
   `require` (default), `verify` (CA-verified TLS), or `disable`
