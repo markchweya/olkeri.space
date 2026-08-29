@@ -28,6 +28,12 @@ type ArticleForm = {
   imageCredit: string
 }
 
+type ImportResult = {
+  label: string
+  published: string[]
+  error?: string
+}
+
 const emptyForm: ArticleForm = {
   title: '',
   slug: '',
@@ -67,6 +73,10 @@ export default function AdminPage() {
   const [languageFilter, setLanguageFilter] = useState<ArticleLanguage | 'all'>('all')
   const [message, setMessage] = useState('')
   const [saving, setSaving] = useState(false)
+  const [importText, setImportText] = useState('')
+  const [importing, setImporting] = useState(false)
+  const [importMessage, setImportMessage] = useState('')
+  const [importResults, setImportResults] = useState<ImportResult[]>([])
 
   const loadArticles = useCallback(async () => {
     try {
@@ -142,6 +152,55 @@ export default function AdminPage() {
     setAuthenticated(false)
     setArticles([])
     setMessage('Signed out.')
+  }
+
+  async function runImport() {
+    setImportMessage('')
+    setImportResults([])
+
+    let payload: unknown
+
+    try {
+      payload = JSON.parse(importText)
+    } catch (error) {
+      setImportMessage(
+        `That is not valid JSON: ${error instanceof Error ? error.message : 'parse failed'}`
+      )
+      return
+    }
+
+    // A bare array is almost always a translations batch pasted straight from a
+    // generated file, so accept it rather than making people wrap it by hand.
+    const body = Array.isArray(payload) ? { translations: payload } : payload
+
+    setImporting(true)
+
+    try {
+      const data = await api<{
+        results: ImportResult[]
+        published: number
+        succeeded: number
+        failed: number
+      }>('/api/admin/import', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      })
+
+      setImportResults(data.results)
+      setImportMessage(
+        data.failed > 0
+          ? `Published ${data.published} article(s). ${data.failed} entr${data.failed === 1 ? 'y' : 'ies'} failed.`
+          : `Published ${data.published} article(s) from ${data.succeeded} entr${data.succeeded === 1 ? 'y' : 'ies'}.`
+      )
+
+      if (data.failed === 0) setImportText('')
+
+      await loadArticles()
+    } catch (error) {
+      setImportMessage(error instanceof Error ? error.message : 'Import failed.')
+    } finally {
+      setImporting(false)
+    }
   }
 
   function updateTitle(title: string) {
@@ -540,6 +599,74 @@ export default function AdminPage() {
 
             {message && <p className="mt-4 text-sm text-green-300">{message}</p>}
           </form>
+
+          <section className="rounded-lg border border-white/10 bg-black/35 p-5 sm:p-6">
+            <h2 className="text-2xl font-medium">Import a batch</h2>
+            <p className="mt-2 text-sm text-white/60">
+              Paste JSON to publish many articles or translations at once. Goes
+              straight to the database — no commit, no redeploy. Use{' '}
+              <code className="text-white/80">{'{"articles": [...]}'}</code> for new
+              stories, <code className="text-white/80">{'{"translations": [...]}'}</code>{' '}
+              to attach editions to articles that already exist, or both together.
+            </p>
+
+            <textarea
+              value={importText}
+              onChange={event => setImportText(event.target.value)}
+              rows={10}
+              spellCheck={false}
+              className="mt-5 w-full rounded-md border border-white/15 bg-black/40 px-4 py-3 font-mono text-sm text-white outline-none transition-colors focus:border-green-400"
+              placeholder={'{\n  "translations": [\n    {\n      "sourceSlug": "ai-in-kenya-nairobi-startups",\n      "translations": [\n        { "language": "fr", "title": "...", "content": "..." }\n      ]\n    }\n  ]\n}'}
+            />
+
+            <div className="mt-4 flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={runImport}
+                disabled={importing || !importText.trim()}
+                className="rounded-md bg-green-400 px-5 py-3 font-medium text-black transition-colors hover:bg-green-300 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {importing ? 'Publishing...' : 'Publish batch'}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setImportText('')
+                  setImportResults([])
+                  setImportMessage('')
+                }}
+                disabled={importing}
+                className="rounded-md border border-white/15 px-5 py-3 font-medium text-white transition-colors hover:border-white/40 disabled:opacity-50"
+              >
+                Clear
+              </button>
+            </div>
+
+            {importMessage && (
+              <p className="mt-4 text-sm text-green-300">{importMessage}</p>
+            )}
+
+            {importResults.length > 0 && (
+              <ul className="mt-4 grid gap-2">
+                {importResults.map((result, index) => (
+                  <li
+                    key={`${result.label}-${index}`}
+                    className="rounded-md border border-white/10 bg-black/30 px-4 py-3 text-sm"
+                  >
+                    <span className="font-medium text-white">{result.label}</span>
+                    {result.error ? (
+                      <span className="mt-1 block text-red-300">{result.error}</span>
+                    ) : (
+                      <span className="mt-1 block text-white/60">
+                        {result.published.join(', ')}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
 
           <section className="rounded-lg border border-white/10 bg-black/35 p-5 sm:p-6">
             <h2 className="text-2xl font-medium">Manage articles</h2>

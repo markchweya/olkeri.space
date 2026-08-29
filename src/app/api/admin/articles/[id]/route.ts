@@ -61,12 +61,17 @@ export async function PUT(request: Request, { params }: RouteContext) {
   }
 
   const rows = await dbQuery(
+    // author and tags coalesce onto the stored value: the edit form does not
+    // send them, and a bare assignment would blank the byline every time
+    // somebody fixed a typo.
     `update articles set
        title = $1, slug = $2, content = $3, language = $4, summary = $5,
        category = $6, region = $7, source_name = $8, source_url = $9,
        image_url = $10, image_credit = $11,
-       published_at = case when $12 then now() else published_at end
-     where id = $13
+       author = coalesce($12, author),
+       tags = coalesce($13, tags),
+       published_at = case when $14 then now() else published_at end
+     where id = $15
      returning *`,
     [
       row.title,
@@ -80,6 +85,8 @@ export async function PUT(request: Request, { params }: RouteContext) {
       row.source_url,
       row.image_url,
       row.image_credit,
+      row.author,
+      row.tags,
       parsed.data.republish === true,
       id,
     ]

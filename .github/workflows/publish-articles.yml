@@ -2,18 +2,19 @@ name: Publish articles
 
 # Publishes prepared article batches to the live site.
 #
-# Automatic: any push to main that adds or changes a file in content/
-# publishes the changed batches.
-# Manual: run this workflow and give it a file (and optional slice).
+# Manual only. Run this workflow and give it a file (and optional slice).
+#
+# It used to publish automatically on any push touching content/, which made
+# the repository the content pipeline: every story had to be committed, and
+# every commit dragged a site rebuild behind it. Articles belong in the
+# database, so the normal route is now the admin importer at /admin, which
+# writes straight to it. This remains as the bulk/automation escape hatch.
 #
 # Requires one repository secret: OLKERI_CONNECTOR_TOKEN
 # (Settings -> Secrets and variables -> Actions -> New repository secret),
 # set to the same value as OLKERI_CONNECTOR_TOKEN on the site host.
 
 on:
-  push:
-    branches: [main]
-    paths: ['content/**.json']
   workflow_dispatch:
     inputs:
       file:

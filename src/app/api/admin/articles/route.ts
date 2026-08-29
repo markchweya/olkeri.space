@@ -47,9 +47,9 @@ export async function POST(request: Request) {
 
   const rows = await dbQuery(
     `insert into articles (
-       title, slug, content, language, summary, category, region,
-       source_name, source_url, image_url, image_credit, published_at
-     ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+       title, slug, content, language, summary, category, region, tags,
+       source_name, source_url, image_url, image_credit, author, published_at
+     ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
      on conflict (language, slug) do nothing
      returning *`,
     [
@@ -60,10 +60,12 @@ export async function POST(request: Request) {
       row.summary,
       row.category,
       row.region,
+      row.tags,
       row.source_name,
       row.source_url,
       row.image_url,
       row.image_credit,
+      row.author,
       parsed.data.publishNow === false ? null : new Date().toISOString(),
     ]
   )
