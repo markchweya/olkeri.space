@@ -35,6 +35,11 @@ on:
         required: false
         default: false
         type: boolean
+      site:
+        description: 'Target site (default https://olkeri.space)'
+        required: false
+        default: 'https://olkeri.space'
+        type: string
 
 jobs:
   publish:
@@ -78,6 +83,7 @@ jobs:
           for file in ${{ steps.files.outputs.list }}; do
             echo "::group::$file"
             node scripts/publish-batch.mjs "$file" \
+              --site "${{ inputs.site || 'https://olkeri.space' }}" \
               --start "${{ inputs.start || '0' }}" \
               --limit "${{ inputs.limit || '0' }}" \
               ${{ inputs.dry_run == true && '--dry-run' || '' }} || status=1

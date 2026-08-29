@@ -62,6 +62,39 @@ console.log(
 
 const failures = []
 let published = 0
+let target = site
+
+// A redirect between hosts (olkeri.space -> www.olkeri.space) makes fetch
+// drop the Authorization header, which the API then reports as a 401. Post
+// with redirects disabled and re-target the canonical origin instead.
+async function post(article) {
+  const response = await fetch(`${target}/api/articles/publish`, {
+    method: 'POST',
+    redirect: 'manual',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(article),
+  })
+
+  if (response.status >= 300 && response.status < 400) {
+    const location = response.headers.get('location')
+
+    if (!location) return response
+
+    const redirected = new URL(location, `${target}/`).origin
+
+    if (redirected === target) return response
+
+    console.log(`  redirected to ${redirected}, retrying there`)
+    target = redirected
+
+    return post(article)
+  }
+
+  return response
+}
 
 for (const [index, article] of batch.entries()) {
   const label = `[${index + 1}/${batch.length}] ${article.slug}`
@@ -73,14 +106,7 @@ for (const [index, article] of batch.entries()) {
   }
 
   try {
-    const response = await fetch(`${site}/api/articles/publish`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(article),
-    })
+    const response = await post(article)
 
     const data = await response.json().catch(() => ({}))
 
