@@ -77,16 +77,20 @@ export async function POST(request: Request) {
          title, slug, content, language, summary, category, region, tags,
          source_name, source_url, image_url, image_credit, author, published_at
        ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+       -- Title and content always overwrite; every optional field coalesces onto
+       -- the stored value. Re-importing a corrected body should not blank the
+       -- image, byline or source of a story just because the payload only
+       -- carried the prose.
        on conflict (language, slug) do update set
          title = excluded.title,
          content = excluded.content,
-         summary = excluded.summary,
-         category = excluded.category,
-         region = excluded.region,
-         source_name = excluded.source_name,
-         source_url = excluded.source_url,
-         image_url = excluded.image_url,
-         image_credit = excluded.image_credit,
+         summary = coalesce(excluded.summary, articles.summary),
+         category = coalesce(excluded.category, articles.category),
+         region = coalesce(excluded.region, articles.region),
+         source_name = coalesce(excluded.source_name, articles.source_name),
+         source_url = coalesce(excluded.source_url, articles.source_url),
+         image_url = coalesce(excluded.image_url, articles.image_url),
+         image_credit = coalesce(excluded.image_credit, articles.image_credit),
          author = coalesce(excluded.author, articles.author),
          tags = coalesce(excluded.tags, articles.tags)
        returning slug, language`,
