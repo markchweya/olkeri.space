@@ -11,7 +11,7 @@ const spaceGrotesk = Space_Grotesk({
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://olkeri.space'),
+  metadataBase: new URL('https://www.olkeri.space'),
   title: {
     default: 'Olkeri — AI News',
     template: '%s | Olkeri AI News',
