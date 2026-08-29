@@ -4,17 +4,19 @@ name: Publish translations
 # live. Unlike "Publish articles" this never rewrites the English story or its
 # publication date, so back-filling translations does not reshuffle the feed.
 #
-# Automatic: any push to main that adds or changes a file in translations/.
-# Manual: run this workflow and give it a file (and optional slice).
+# Manual only. Run this workflow and give it a file (and optional slice).
+#
+# It used to publish automatically on any push touching translations/, which
+# made the repository the content pipeline: every story had to be committed,
+# and every commit dragged a site rebuild behind it. Articles belong in the
+# database, so the normal route is now the admin importer at /admin, which
+# writes straight to it. This remains as the bulk/automation escape hatch.
 #
 # Requires one repository secret: OLKERI_CONNECTOR_TOKEN
 # (Settings -> Secrets and variables -> Actions -> New repository secret),
 # set to the same value as OLKERI_CONNECTOR_TOKEN on the site host.
 
 on:
-  push:
-    branches: [main]
-    paths: ['translations/**.json']
   workflow_dispatch:
     inputs:
       file:
