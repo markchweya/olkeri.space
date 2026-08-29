@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     siteName: 'Olkeri AI News',
     type: 'website',
+    images: ['/og-default.png'],
   },
   twitter: {
     card: 'summary_large_image',

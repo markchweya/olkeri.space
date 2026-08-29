@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
       description,
       type: 'article',
       publishedTime: article.published_at ?? undefined,
-      images: article.image_url ? [article.image_url] : undefined,
+      images: [article.image_url ?? '/og-default.png'],
     },
   }
 }
