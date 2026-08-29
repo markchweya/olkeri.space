@@ -1,0 +1,35 @@
+name: Set up database schema
+
+# Applies db/schema.sql to the database. Run manually from the Actions tab.
+# Requires a repository secret named DATABASE_URL (the pooled Postgres
+# connection string). Safe to run more than once.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check the connection string is configured
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::Repository secret DATABASE_URL is not set."
+            exit 1
+          fi
+
+      - name: Install pg
+        run: npm install pg --no-save --no-audit --no-fund
+
+      - name: Apply schema
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: node scripts/apply-schema.mjs
