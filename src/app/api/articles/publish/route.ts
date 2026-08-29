@@ -12,7 +12,7 @@ const articleSchema = z.object({
   title: z.string().trim().min(1).max(300),
   slug: z.string().trim().max(300).optional(),
   content: z.string().trim().min(1).max(50_000),
-  language: z.enum(['en', 'fr', 'de']).default('en'),
+  language: z.enum(['en', 'fr', 'de', 'es']).default('en'),
   summary: z.string().trim().max(500).optional(),
   category: z.string().trim().max(50).optional(),
   region: z.string().trim().max(50).optional(),
@@ -27,7 +27,7 @@ const articleSchema = z.object({
 
 const bodySchema = articleSchema.extend({
   translationGroupId: z.uuid().optional(),
-  translations: z.array(articleSchema).max(2).optional(),
+  translations: z.array(articleSchema).max(3).optional(),
 })
 
 type ArticleInput = z.infer<typeof articleSchema>
