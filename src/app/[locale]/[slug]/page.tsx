@@ -1,7 +1,10 @@
+import { Fragment } from 'react'
+
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import AdSlot from '@/components/AdSlot'
 import ArticleFallbackImage from '@/components/ArticleFallbackImage'
 import NewsCard from '@/components/NewsCard'
 import {
@@ -25,6 +28,9 @@ import {
   getMostReadArticles,
   incrementArticleViews,
 } from '@/lib/news'
+
+// Display unit "Olkeri.Space" from AdSense.
+const ARTICLE_AD_SLOT = '6429913603'
 
 type ArticlePageProps = {
   params: Promise<{ locale: string; slug: string }>
@@ -165,26 +171,32 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         ) : null}
 
         <div className="mt-10 max-w-3xl space-y-8 text-[1.05rem] leading-9 text-white/78 sm:text-lg sm:leading-10">
-          {paragraphs.map((paragraph, index) =>
-            isArticleSectionHeading(paragraph) ? (
-              <h2
-                key={index}
-                className="pt-4 text-2xl font-medium leading-tight text-white sm:text-3xl"
-              >
-                {paragraph}
-              </h2>
-            ) : (
-              <p
-                key={index}
-                className={`whitespace-pre-line ${
-                  index === 0 ? 'text-white/88' : ''
-                }`}
-              >
-                {paragraph}
-              </p>
-            )
-          )}
+          {paragraphs.map((paragraph, index) => (
+            <Fragment key={index}>
+              {isArticleSectionHeading(paragraph) ? (
+                <h2 className="pt-4 text-2xl font-medium leading-tight text-white sm:text-3xl">
+                  {paragraph}
+                </h2>
+              ) : (
+                <p
+                  className={`whitespace-pre-line ${
+                    index === 0 ? 'text-white/88' : ''
+                  }`}
+                >
+                  {paragraph}
+                </p>
+              )}
+
+              {/* One unit mid-article, only when the piece is long enough
+                  that it does not interrupt the opening. */}
+              {index === 3 && paragraphs.length > 7 ? (
+                <AdSlot slot={ARTICLE_AD_SLOT} className="py-2" />
+              ) : null}
+            </Fragment>
+          ))}
         </div>
+
+        <AdSlot slot={ARTICLE_AD_SLOT} className="mt-12 max-w-3xl" />
 
         <script
           type="application/ld+json"
