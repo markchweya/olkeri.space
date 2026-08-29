@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
 
-// Google ad hosts are allowed because the site serves AdSense; article
-// images come from many publishers' press/newsroom domains, hence the
-// broad https: img-src.
+// Google ad hosts are allowed because the site serves AdSense, and
+// news.google.com for Google Extended Access (both matched by the
+// *.google.com entries); article images come from many publishers'
+// press/newsroom domains, hence the broad https: img-src.
 const contentSecurityPolicy = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.gstatic.com https://*.googleadservices.com https://*.adtrafficquality.google",
@@ -35,6 +36,12 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  async redirects() {
+    return [
+      // The disclaimer route was previously served at a capitalised path.
+      { source: '/Disclaimer', destination: '/disclaimer', permanent: true },
+    ]
+  },
   async headers() {
     return [
       {

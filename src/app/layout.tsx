@@ -48,6 +48,26 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4070347184423387"
           crossOrigin="anonymous"
         />
+
+        {/* Google Extended Access (Subscribe with Google), configured in
+            Publisher Center. Reports article access to Google News. */}
+        <script
+          async
+          type="application/javascript"
+          src="https://news.google.com/swg/js/v1/swg-basic.js"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(self.SWG_BASIC = self.SWG_BASIC || []).push(basicSubscriptions => {
+  basicSubscriptions.init({
+    type: "NewsArticle",
+    isPartOfType: ["Product"],
+    isPartOfProductId: "CAowjMPMDA:openaccess",
+    clientOptions: { theme: "light", lang: "en" },
+  });
+});`,
+          }}
+        />
       </head>
       <body
         suppressHydrationWarning
