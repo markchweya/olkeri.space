@@ -3,7 +3,7 @@ import { getLatestArticles } from '@/lib/news'
 
 export const revalidate = 900
 
-const BASE_URL = 'https://olkeri.space'
+const BASE_URL = 'https://www.olkeri.space'
 
 function escapeXml(value: string) {
   return value

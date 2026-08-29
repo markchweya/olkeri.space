@@ -5,7 +5,7 @@ import { getSitemapArticles } from '@/lib/news'
 
 export const revalidate = 3600
 
-const BASE_URL = 'https://olkeri.space'
+const BASE_URL = 'https://www.olkeri.space'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [
