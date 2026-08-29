@@ -84,6 +84,113 @@ if (problems.length > 0) {
   process.exit(1)
 }
 
+// Words that are only ever correct with a diacritic. An unaccented spelling is
+// either a different word or not a word at all, so it is always a mistake —
+// unlike "de" or "el", which are valid both ways and cannot be checked here.
+const MISSPELLINGS = {
+  fr: {
+    modele: 'modèle',
+    donnees: 'données',
+    systeme: 'système',
+    apres: 'après',
+    tres: 'très',
+    deja: 'déjà',
+    meme: 'même',
+    etre: 'être',
+    entrainement: 'entraînement',
+    developpement: 'développement',
+    securite: 'sécurité',
+    societe: 'société',
+    economie: 'économie',
+    strategie: 'stratégie',
+    energie: 'énergie',
+    reseau: 'réseau',
+  },
+  de: {
+    fur: 'für',
+    uber: 'über',
+    konnen: 'können',
+    grosste: 'größte',
+    Grosse: 'Größe',
+    zunachst: 'zunächst',
+    wahrend: 'während',
+    naechste: 'nächste',
+    Unternehmern: 'Unternehmen',
+    Massnahmen: 'Maßnahmen',
+    Behorde: 'Behörde',
+    Marktfuhrer: 'Marktführer',
+    europaische: 'europäische',
+    zusatzlich: 'zusätzlich',
+    Erklarung: 'Erklärung',
+  },
+  es: {
+    ano: 'año',
+    anos: 'años',
+    pequeno: 'pequeño',
+    pequena: 'pequeña',
+    diseno: 'diseño',
+    disenar: 'diseñar',
+    disenado: 'diseñado',
+    disenada: 'diseñada',
+    disenadas: 'diseñadas',
+    disenados: 'diseñados',
+    disenan: 'diseñan',
+    disenaron: 'diseñaron',
+    senal: 'señal',
+    senales: 'señales',
+    companias: 'compañías',
+    compania: 'compañía',
+    ensena: 'enseña',
+    manana: 'mañana',
+    espanol: 'español',
+    Espana: 'España',
+    tecnologia: 'tecnología',
+    articulo: 'artículo',
+    articulos: 'artículos',
+    politica: 'política',
+    economia: 'economía',
+    energia: 'energía',
+    tambien: 'también',
+    segun: 'según',
+    millon: 'millón',
+    ademas: 'además',
+    despues: 'después',
+    asi: 'así',
+    mas: 'más',
+  },
+}
+
+const misspelt = []
+
+for (const entry of batch) {
+  for (const translation of entry.translations) {
+    const table = MISSPELLINGS[translation.language]
+
+    if (!table) continue
+
+    const text = `${translation.title} ${translation.summary ?? ''} ${translation.content}`
+    const found = new Set()
+
+    for (const [wrong, right] of Object.entries(table)) {
+      // \b is ASCII-only in JavaScript, so it would find "tres" inside
+      // "paramètres". Use Unicode letter look-arounds instead.
+      const boundary = new RegExp(`(?<!\\p{L})${wrong}(?!\\p{L})`, 'u')
+
+      if (boundary.test(text)) found.add(`${wrong} -> ${right}`)
+    }
+
+    if (found.size > 0) {
+      misspelt.push(`${entry.sourceSlug} (${translation.language}): ${[...found].join(', ')}`)
+    }
+  }
+}
+
+if (misspelt.length > 0) {
+  console.error(`${misspelt.length} translation(s) are missing diacritics:`)
+  for (const problem of misspelt.slice(0, 30)) console.error(`  ${problem}`)
+  process.exit(1)
+}
+
 const editions = batch.reduce((total, entry) => total + entry.translations.length, 0)
 
 console.log(
