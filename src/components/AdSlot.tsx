@@ -5,6 +5,12 @@ import { useEffect, useRef } from 'react'
 type AdSlotProps = {
   /** AdSense ad unit id (data-ad-slot). */
   slot: string
+  /**
+   * AdSense unit format. 'auto' is a responsive display unit;
+   * 'autorelaxed' is a Multiplex unit, a grid of suggestions intended for
+   * the end of a page rather than inside the article body.
+   */
+  format?: 'auto' | 'autorelaxed'
   /** Extra classes for the wrapper, e.g. vertical spacing. */
   className?: string
   /** Label shown above the ad. Keeps advertising distinguishable from editorial. */
@@ -19,7 +25,12 @@ declare global {
   }
 }
 
-export default function AdSlot({ slot, className = '', label = 'Advertisement' }: AdSlotProps) {
+export default function AdSlot({
+  slot,
+  format = 'auto',
+  className = '',
+  label = 'Advertisement',
+}: AdSlotProps) {
   // The loader script lives in the document head, so each unit only has to
   // register itself once. The ref guards against double registration from
   // re-renders and React strict mode, which AdSense rejects as a duplicate.
@@ -47,8 +58,8 @@ export default function AdSlot({ slot, className = '', label = 'Advertisement' }
         style={{ display: 'block' }}
         data-ad-client={AD_CLIENT}
         data-ad-slot={slot}
-        data-ad-format="auto"
-        data-full-width-responsive="true"
+        data-ad-format={format}
+        {...(format === 'auto' ? { 'data-full-width-responsive': 'true' } : {})}
       />
     </aside>
   )
