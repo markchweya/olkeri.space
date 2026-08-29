@@ -1,9 +1,10 @@
-import { randomUUID, timingSafeEqual } from 'node:crypto'
+import { randomUUID } from 'node:crypto'
 
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 
 import { createSlug } from '@/lib/articles'
+import { isConnectorAuthorized } from '@/lib/connector-auth'
 import { dbQuery } from '@/lib/db'
 
 export const runtime = 'nodejs'
@@ -31,25 +32,6 @@ const bodySchema = articleSchema.extend({
 })
 
 type ArticleInput = z.infer<typeof articleSchema>
-
-function isAuthorized(request: Request) {
-  const expected = process.env.OLKERI_CONNECTOR_TOKEN
-
-  if (!expected) return false
-
-  const authorization = request.headers.get('authorization') ?? ''
-  const [scheme, token] = authorization.split(' ')
-
-  if (scheme?.toLowerCase() !== 'bearer' || !token) return false
-
-  const expectedBuffer = Buffer.from(expected)
-  const tokenBuffer = Buffer.from(token)
-
-  return (
-    expectedBuffer.length === tokenBuffer.length &&
-    timingSafeEqual(expectedBuffer, tokenBuffer)
-  )
-}
 
 function toRow(input: ArticleInput, translationGroupId: string) {
   const slug = createSlug(input.slug || input.title)
@@ -83,7 +65,7 @@ export async function POST(request: Request) {
     )
   }
 
-  if (!isAuthorized(request)) {
+  if (!isConnectorAuthorized(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

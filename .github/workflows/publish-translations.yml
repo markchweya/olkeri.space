@@ -1,0 +1,97 @@
+name: Publish translations
+
+# Attaches French / German / Spanish editions to articles that are already
+# live. Unlike "Publish articles" this never rewrites the English story or its
+# publication date, so back-filling translations does not reshuffle the feed.
+#
+# Automatic: any push to main that adds or changes a file in translations/.
+# Manual: run this workflow and give it a file (and optional slice).
+#
+# Requires one repository secret: OLKERI_CONNECTOR_TOKEN
+# (Settings -> Secrets and variables -> Actions -> New repository secret),
+# set to the same value as OLKERI_CONNECTOR_TOKEN on the site host.
+
+on:
+  push:
+    branches: [main]
+    paths: ['translations/**.json']
+  workflow_dispatch:
+    inputs:
+      file:
+        description: 'Batch file (e.g. translations/batch-01.json)'
+        required: true
+        type: string
+      start:
+        description: 'Skip this many articles'
+        required: false
+        default: '0'
+        type: string
+      limit:
+        description: 'Translate at most this many (0 = all)'
+        required: false
+        default: '0'
+        type: string
+      dry_run:
+        description: 'Validate only, publish nothing'
+        required: false
+        default: false
+        type: boolean
+      site:
+        description: 'Target site'
+        required: false
+        default: 'https://www.olkeri.space'
+        type: string
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Determine batch files
+        id: files
+        run: |
+          if [ -n "${{ inputs.file }}" ]; then
+            echo "list=${{ inputs.file }}" >> "$GITHUB_OUTPUT"
+          else
+            changed=$(git diff --name-only --diff-filter=AM HEAD^ HEAD -- 'translations/**.json' | tr '\n' ' ')
+            echo "list=$changed" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check the token is configured
+        env:
+          OLKERI_CONNECTOR_TOKEN: ${{ secrets.OLKERI_CONNECTOR_TOKEN }}
+        run: |
+          if [ -z "$OLKERI_CONNECTOR_TOKEN" ]; then
+            echo "::error::Repository secret OLKERI_CONNECTOR_TOKEN is not set."
+            exit 1
+          fi
+
+      - name: Publish translations
+        if: steps.files.outputs.list != ''
+        env:
+          OLKERI_CONNECTOR_TOKEN: ${{ secrets.OLKERI_CONNECTOR_TOKEN }}
+        run: |
+          # Run every batch even if one fails, then fail the job at the end if
+          # any did, so one bad file cannot skip the others.
+          status=0
+          for file in ${{ steps.files.outputs.list }}; do
+            echo "::group::$file"
+            node scripts/publish-translations.mjs "$file" \
+              --site "${{ inputs.site || 'https://www.olkeri.space' }}" \
+              --start "${{ inputs.start || '0' }}" \
+              --limit "${{ inputs.limit || '0' }}" \
+              ${{ inputs.dry_run == true && '--dry-run' || '' }} || status=1
+            echo "::endgroup::"
+          done
+
+          if [ "$status" -ne 0 ]; then
+            echo "::error::One or more batches failed. A 401 means the OLKERI_CONNECTOR_TOKEN secret does not match the token on the live site. A 404 means the English article for that slug is not published."
+          fi
+          exit "$status"
