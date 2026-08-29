@@ -115,7 +115,6 @@ const MISSPELLINGS = {
     zunachst: 'zunächst',
     wahrend: 'während',
     naechste: 'nächste',
-    Unternehmern: 'Unternehmen',
     Massnahmen: 'Maßnahmen',
     Behorde: 'Behörde',
     Marktfuhrer: 'Marktführer',
