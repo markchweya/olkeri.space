@@ -29,8 +29,10 @@ import {
   incrementArticleViews,
 } from '@/lib/news'
 
-// Display unit "Olkeri.Space" from AdSense.
+// AdSense units. The display unit sits inside the article; the multiplex
+// unit is a grid of suggestions and belongs at the foot of the page.
 const ARTICLE_AD_SLOT = '6429913603'
+const MULTIPLEX_AD_SLOT = '2607992169'
 
 type ArticlePageProps = {
   params: Promise<{ locale: string; slug: string }>
@@ -277,6 +279,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           ) : null}
         </aside>
       )}
+
+      <div className="mx-auto mt-16 max-w-6xl">
+        <AdSlot slot={MULTIPLEX_AD_SLOT} format="autorelaxed" />
+      </div>
     </main>
   )
 }
