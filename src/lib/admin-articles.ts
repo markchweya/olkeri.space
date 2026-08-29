@@ -6,7 +6,7 @@ export const adminArticleSchema = z.object({
   title: z.string().trim().min(1).max(300),
   slug: z.string().trim().max(300).optional(),
   content: z.string().trim().min(1).max(50_000),
-  language: z.enum(['en', 'fr', 'de']),
+  language: z.enum(['en', 'fr', 'de', 'es']),
   summary: z.string().trim().max(500).optional(),
   category: z.string().trim().max(50).optional(),
   region: z.string().trim().max(50).optional(),

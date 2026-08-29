@@ -9,7 +9,7 @@ create table if not exists articles (
   title text not null,
   slug text not null,
   content text not null,
-  language text not null check (language in ('en', 'fr', 'de')),
+  language text not null check (language in ('en', 'fr', 'de', 'es')),
   summary text,
   category text,
   region text,
@@ -53,3 +53,8 @@ create trigger articles_updated_at
 
 -- Byline. Added after launch; safe to re-run.
 alter table articles add column if not exists author text;
+
+-- Spanish edition. Widens the original three-language constraint.
+alter table articles drop constraint if exists articles_language_check;
+alter table articles add constraint articles_language_check
+  check (language in ('en', 'fr', 'de', 'es'));

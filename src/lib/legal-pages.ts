@@ -164,7 +164,11 @@ export const legalNavItems = [
   { href: '/dmca-copyright-policy', label: 'DMCA' },
 ]
 
-export const localizedLegalPages: Record<'fr' | 'de', Record<string, Partial<LegalPageContent>>> = {
+// Languages absent here fall back to the English text rather than
+// rendering a page half-translated.
+export const localizedLegalPages: Partial<
+  Record<'fr' | 'de' | 'es', Record<string, Partial<LegalPageContent>>>
+> = {
   fr: {
     'about': {
       title: 'A propos d Olkeri',

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: '%s | Olkeri AI News',
   },
   description:
-    'Daily artificial-intelligence news from around the world, in English, French and German.',
+    'Daily artificial-intelligence news from around the world, in English, French, German and Spanish.',
   openGraph: {
     siteName: 'Olkeri AI News',
     type: 'website',
