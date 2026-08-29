@@ -58,16 +58,33 @@ jobs:
             echo "list=$changed" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Check the token is configured
+        env:
+          OLKERI_CONNECTOR_TOKEN: ${{ secrets.OLKERI_CONNECTOR_TOKEN }}
+        run: |
+          if [ -z "$OLKERI_CONNECTOR_TOKEN" ]; then
+            echo "::error::Repository secret OLKERI_CONNECTOR_TOKEN is not set."
+            exit 1
+          fi
+
       - name: Publish
         if: steps.files.outputs.list != ''
         env:
           OLKERI_CONNECTOR_TOKEN: ${{ secrets.OLKERI_CONNECTOR_TOKEN }}
         run: |
+          # Publish every batch even if one fails, then fail the job at the
+          # end if any did, so one bad file cannot skip the others.
+          status=0
           for file in ${{ steps.files.outputs.list }}; do
             echo "::group::$file"
             node scripts/publish-batch.mjs "$file" \
               --start "${{ inputs.start || '0' }}" \
               --limit "${{ inputs.limit || '0' }}" \
-              ${{ inputs.dry_run == true && '--dry-run' || '' }}
+              ${{ inputs.dry_run == true && '--dry-run' || '' }} || status=1
             echo "::endgroup::"
           done
+
+          if [ "$status" -ne 0 ]; then
+            echo "::error::One or more batches failed. A 401 means the OLKERI_CONNECTOR_TOKEN secret does not match the token on the live site."
+          fi
+          exit "$status"
