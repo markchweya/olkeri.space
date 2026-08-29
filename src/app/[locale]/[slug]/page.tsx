@@ -7,6 +7,7 @@ import NewsCard from '@/components/NewsCard'
 import {
   appCopy,
   formatArticleDate,
+  getArticleAuthor,
   getArticleExcerpt,
   getArticleParagraphs,
   getArticlePath,
@@ -131,6 +132,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <span>{getReadTime(article.content, copy.readTimeSuffix)}</span>
         </div>
 
+        <p className="mt-3 text-sm text-white/60">
+          {copy.news.byline}{' '}
+          <span className="text-white/85">{getArticleAuthor(article)}</span>
+        </p>
+
         <h1 className="mt-4 max-w-3xl text-4xl font-medium leading-tight sm:text-6xl">
           {article.title}
         </h1>
@@ -179,6 +185,40 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             )
           )}
         </div>
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'NewsArticle',
+              headline: article.title,
+              description: getArticleExcerpt(article, 200),
+              image: [article.image_url ?? 'https://www.olkeri.space/og-default.png'],
+              datePublished: article.published_at ?? article.created_at,
+              dateModified: article.updated_at ?? article.published_at ?? article.created_at,
+              inLanguage: article.language,
+              author: {
+                '@type': 'Organization',
+                name: getArticleAuthor(article),
+                url: 'https://www.olkeri.space',
+              },
+              publisher: {
+                '@type': 'Organization',
+                name: 'Olkeri',
+                url: 'https://www.olkeri.space',
+                logo: {
+                  '@type': 'ImageObject',
+                  url: 'https://www.olkeri.space/og-default.png',
+                },
+              },
+              mainEntityOfPage: {
+                '@type': 'WebPage',
+                '@id': `https://www.olkeri.space${getArticlePath(article)}`,
+              },
+            }),
+          }}
+        />
 
         {article.source_url ? (
           <p className="mt-10 max-w-3xl border-t border-white/10 pt-6 text-sm text-white/55">

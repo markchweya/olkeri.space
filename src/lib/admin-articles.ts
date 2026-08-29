@@ -14,6 +14,7 @@ export const adminArticleSchema = z.object({
   sourceUrl: z.union([z.url().max(2000), z.literal('')]).optional(),
   imageUrl: z.union([z.url().max(2000), z.literal('')]).optional(),
   imageCredit: z.string().trim().max(200).optional(),
+  author: z.string().trim().max(120).optional(),
   publishNow: z.boolean().optional(),
 })
 
@@ -36,5 +37,6 @@ export function toArticleRow(input: AdminArticleInput) {
     source_url: input.sourceUrl || null,
     image_url: input.imageUrl || null,
     image_credit: input.imageCredit || null,
+    author: input.author || null,
   }
 }

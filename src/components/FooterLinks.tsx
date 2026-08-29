@@ -5,7 +5,7 @@ import { articleLanguages, appCopy } from '@/lib/articles'
 import { legalNavItems } from '@/lib/legal-pages'
 import { useAppLanguage } from '@/lib/use-app-language'
 
-const legalLabelKeys = ['privacy', 'terms', 'cookies', 'disclaimer', 'editorial', 'dmca'] as const
+const legalLabelKeys = ['about', 'privacy', 'terms', 'cookies', 'disclaimer', 'editorial', 'dmca'] as const
 
 export default function FooterLinks() {
   const appLanguage = useAppLanguage()

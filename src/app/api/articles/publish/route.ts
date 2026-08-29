@@ -21,6 +21,7 @@ const articleSchema = z.object({
   sourceUrl: z.url().max(2000).optional(),
   imageUrl: z.url().max(2000).optional(),
   imageCredit: z.string().trim().max(200).optional(),
+  author: z.string().trim().max(120).optional(),
   publishNow: z.boolean().optional(),
 })
 
@@ -68,6 +69,7 @@ function toRow(input: ArticleInput, translationGroupId: string) {
     source_url: input.sourceUrl ?? null,
     image_url: input.imageUrl ?? null,
     image_credit: input.imageCredit ?? null,
+    author: input.author ?? null,
     translation_group_id: translationGroupId,
     published_at: input.publishNow === false ? null : new Date().toISOString(),
   }
@@ -133,9 +135,9 @@ export async function POST(request: Request) {
     const rows = await dbQuery<(typeof published)[number]>(
       `insert into articles (
          title, slug, content, language, summary, category, region, tags,
-         source_name, source_url, image_url, image_credit,
+         source_name, source_url, image_url, image_credit, author,
          translation_group_id, published_at
-       ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+       ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
        on conflict (language, slug) do update set
          title = excluded.title,
          content = excluded.content,
@@ -147,6 +149,7 @@ export async function POST(request: Request) {
          source_url = excluded.source_url,
          image_url = excluded.image_url,
          image_credit = excluded.image_credit,
+         author = excluded.author,
          translation_group_id = excluded.translation_group_id,
          published_at = excluded.published_at
        returning id, title, slug, language, published_at`,
@@ -163,6 +166,7 @@ export async function POST(request: Request) {
         row.source_url,
         row.image_url,
         row.image_credit,
+        row.author,
         row.translation_group_id,
         row.published_at,
       ]

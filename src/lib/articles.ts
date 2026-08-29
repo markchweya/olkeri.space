@@ -25,6 +25,14 @@ export type Article = {
   source_name?: string | null
   source_url?: string | null
   image_credit?: string | null
+  author?: string | null
+}
+
+// Shown when an article carries no explicit byline.
+export const DEFAULT_AUTHOR = 'Olkeri.space'
+
+export function getArticleAuthor(article: Pick<Article, 'author'>) {
+  return article.author?.trim() || DEFAULT_AUTHOR
 }
 
 export const newsCategories = [
@@ -160,6 +168,7 @@ export const appCopy = {
       older: 'Older news',
       newer: 'Newer news',
       backToNews: 'All AI news',
+      byline: 'By',
     },
     categories: {
       companies: 'Companies',
@@ -201,6 +210,7 @@ export const appCopy = {
       cta: 'Contact Us',
     },
     legalLabels: {
+      about: 'About',
       privacy: 'Privacy',
       terms: 'Terms',
       cookies: 'Cookies',
@@ -241,6 +251,7 @@ export const appCopy = {
       older: 'Actus plus anciennes',
       newer: 'Actus plus récentes',
       backToNews: 'Toutes les actus IA',
+      byline: 'Par',
     },
     categories: {
       companies: 'Entreprises',
@@ -282,6 +293,7 @@ export const appCopy = {
       cta: 'Nous contacter',
     },
     legalLabels: {
+      about: 'A propos',
       privacy: 'Confidentialite',
       terms: 'Conditions',
       cookies: 'Cookies',
@@ -322,6 +334,7 @@ export const appCopy = {
       older: 'Ältere Nachrichten',
       newer: 'Neuere Nachrichten',
       backToNews: 'Alle KI-Nachrichten',
+      byline: 'Von',
     },
     categories: {
       companies: 'Unternehmen',
@@ -363,6 +376,7 @@ export const appCopy = {
       cta: 'Kontakt aufnehmen',
     },
     legalLabels: {
+      about: 'Uber uns',
       privacy: 'Datenschutz',
       terms: 'Bedingungen',
       cookies: 'Cookies',

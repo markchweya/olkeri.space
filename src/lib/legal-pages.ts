@@ -19,6 +19,24 @@ const contactBlock: LegalBlock = {
 }
 
 export const legalPages: Record<string, LegalPageContent> = {
+  'about': {
+    slug: 'about',
+    title: 'About Olkeri',
+    effectiveDate: 'August 29, 2026',
+    intro: [
+      'Olkeri is an independent publication covering artificial intelligence worldwide, published in English, French and German.',
+      'We report on the companies, research, policy, hardware and infrastructure shaping AI, with particular attention to regions that receive less coverage elsewhere, including across Africa, Asia and Latin America.',
+    ],
+    blocks: [
+      { heading: 'What we cover', body: ['Our coverage spans model and product developments, semiconductors and computing infrastructure, regulation and public policy, AI in industry, and the national AI landscapes of individual countries.'], bullets: ['Companies and products', 'Research and capability', 'Policy and regulation', 'Hardware, chips and data centres', 'AI in industry and society'] },
+      { heading: 'Who publishes Olkeri', body: ['Olkeri is published and edited by Mark Chweya, an independent publisher based in Kenya. Editorial decisions, story selection and publication are the responsibility of the publisher.'] },
+      { heading: 'How we work', body: ['Articles are researched and written for Olkeri, and we credit the primary source of any reported development with a link where one exists.', 'We use AI tools in our production process, including for drafting, translation and illustration. Every article is published under the responsibility of the publisher, who is accountable for its content.', 'Our article artwork is created in-house. We do not use third-party photographs without a licence permitting it.'] },
+      { heading: 'Corrections', body: ['We correct errors of fact promptly. If you believe something we published is inaccurate, email us with the article link and the correction, and we will review it and update the article where warranted.'] },
+      { heading: 'Advertising and independence', body: ['The site carries advertising, which may be served by third-party networks. Advertising has no influence over what we cover or how we cover it, and advertisers receive no advance sight of editorial content.'] },
+      { heading: 'Languages', body: ['Olkeri publishes in English, French and German. Translated versions of an article are linked to one another so readers can move between them.'] },
+      { heading: 'Contact', body: ['Olkeri', 'Website: www.olkeri.space', 'Publisher and editor: Mark Chweya'], bullets: ['Email: chweyahub@gmail.com', 'Story tips, corrections and partnership enquiries are all welcome at this address.'] },
+    ],
+  },
   'privacy-policy': {
     slug: 'privacy-policy',
     title: 'Privacy Policy',
@@ -122,6 +140,7 @@ export const legalPages: Record<string, LegalPageContent> = {
 }
 
 export const legalNavItems = [
+  { href: '/about', label: 'About' },
   { href: '/privacy-policy', label: 'Privacy' },
   { href: '/terms-and-conditions', label: 'Terms' },
   { href: '/cookie-policy', label: 'Cookies' },
@@ -132,6 +151,22 @@ export const legalNavItems = [
 
 export const localizedLegalPages: Record<'fr' | 'de', Record<string, Partial<LegalPageContent>>> = {
   fr: {
+    'about': {
+      title: 'A propos d Olkeri',
+      intro: [
+        'Olkeri est une publication independante consacree a l intelligence artificielle dans le monde entier, publiee en anglais, en francais et en allemand.',
+        'Nous couvrons les entreprises, la recherche, la politique, le materiel et les infrastructures qui faconnent l IA, avec une attention particuliere aux regions moins couvertes ailleurs, notamment en Afrique, en Asie et en Amerique latine.',
+      ],
+      blocks: [
+        { heading: 'Nos sujets', body: ['Notre couverture comprend les modeles et produits, les semi-conducteurs et les infrastructures de calcul, la reglementation et les politiques publiques, l IA dans l industrie, et les paysages nationaux de l IA.'] },
+        { heading: 'Qui publie Olkeri', body: ['Olkeri est publie et edite par Mark Chweya, editeur independant base au Kenya. Les decisions editoriales relevent de la responsabilite de l editeur.'] },
+        { heading: 'Notre methode', body: ['Les articles sont rediges pour Olkeri et nous creditons la source primaire de toute information rapportee, avec un lien lorsqu il existe.', 'Nous utilisons des outils d IA dans notre processus de production, notamment pour la redaction, la traduction et l illustration. Chaque article est publie sous la responsabilite de l editeur.', 'Nos illustrations sont realisees en interne.'] },
+        { heading: 'Corrections', body: ['Nous corrigeons rapidement les erreurs factuelles. Ecrivez-nous avec le lien de l article et la correction proposee.'] },
+        { heading: 'Publicite et independance', body: ['Le site diffuse de la publicite, qui peut etre servie par des reseaux tiers. La publicite n influence pas nos choix editoriaux.'] },
+        { heading: 'Langues', body: ['Olkeri publie en anglais, en francais et en allemand. Les versions traduites d un article sont reliees entre elles.'] },
+        { heading: 'Contact', body: ['Olkeri', 'Site web: www.olkeri.space', 'Editeur et redacteur: Mark Chweya'], bullets: ['Email: chweyahub@gmail.com'] },
+      ],
+    },
     'privacy-policy': {
       title: 'Politique de confidentialite',
       intro: [
@@ -204,6 +239,22 @@ export const localizedLegalPages: Record<'fr' | 'de', Record<string, Partial<Leg
     },
   },
   de: {
+    'about': {
+      title: 'Uber Olkeri',
+      intro: [
+        'Olkeri ist eine unabhangige Publikation uber kunstliche Intelligenz weltweit, veroffentlicht auf Englisch, Franzosisch und Deutsch.',
+        'Wir berichten uber Unternehmen, Forschung, Politik, Hardware und Infrastruktur, die die KI pragen, mit besonderem Augenmerk auf Regionen, uber die anderswo weniger berichtet wird, darunter Afrika, Asien und Lateinamerika.',
+      ],
+      blocks: [
+        { heading: 'Unsere Themen', body: ['Unsere Berichterstattung umfasst Modelle und Produkte, Halbleiter und Recheninfrastruktur, Regulierung und Politik, KI in der Industrie sowie nationale KI-Landschaften.'] },
+        { heading: 'Wer Olkeri herausgibt', body: ['Olkeri wird von Mark Chweya herausgegeben und redigiert, einem unabhangigen Herausgeber mit Sitz in Kenia. Redaktionelle Entscheidungen liegen in seiner Verantwortung.'] },
+        { heading: 'Unsere Arbeitsweise', body: ['Artikel werden fur Olkeri recherchiert und geschrieben, und wir nennen die Primarquelle jeder berichteten Entwicklung mit Link, sofern vorhanden.', 'Wir setzen KI-Werkzeuge im Produktionsprozess ein, unter anderem fur Entwurf, Ubersetzung und Illustration. Jeder Artikel erscheint unter der Verantwortung des Herausgebers.', 'Unsere Bilder werden intern erstellt.'] },
+        { heading: 'Korrekturen', body: ['Sachliche Fehler korrigieren wir umgehend. Schreiben Sie uns mit dem Link zum Artikel und der Korrektur.'] },
+        { heading: 'Werbung und Unabhangigkeit', body: ['Die Website schaltet Werbung, die von Drittanbietern ausgeliefert werden kann. Werbung hat keinen Einfluss auf unsere redaktionellen Entscheidungen.'] },
+        { heading: 'Sprachen', body: ['Olkeri veroffentlicht auf Englisch, Franzosisch und Deutsch. Ubersetzte Fassungen eines Artikels sind miteinander verlinkt.'] },
+        { heading: 'Kontakt', body: ['Olkeri', 'Website: www.olkeri.space', 'Herausgeber und Redakteur: Mark Chweya'], bullets: ['E-Mail: chweyahub@gmail.com'] },
+      ],
+    },
     'privacy-policy': {
       title: 'Datenschutzerklarung',
       intro: [

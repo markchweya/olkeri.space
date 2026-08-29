@@ -50,3 +50,6 @@ drop trigger if exists articles_updated_at on articles;
 create trigger articles_updated_at
   before update on articles
   for each row execute function set_articles_updated_at();
+
+-- Byline. Added after launch; safe to re-run.
+alter table articles add column if not exists author text;
