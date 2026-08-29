@@ -1,0 +1,61 @@
+name: Delete articles
+
+# Removes published articles by slug. Run manually from the Actions tab.
+# Requires the DATABASE_URL repository secret.
+#
+# Deletion is permanent, but article content stays in content/*.json, so
+# anything removed can be republished from its batch file.
+
+on:
+  workflow_dispatch:
+    inputs:
+      slugs:
+        description: 'Comma-separated slugs to delete'
+        required: false
+        type: string
+      file:
+        description: 'Or a file of slugs, one per line (e.g. content/removed-slugs.txt)'
+        required: false
+        type: string
+      language:
+        description: 'Limit to one language (blank = all languages)'
+        required: false
+        default: ''
+        type: string
+      dry_run:
+        description: 'List matches without deleting'
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  delete:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check the connection string is configured
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::Repository secret DATABASE_URL is not set."
+            exit 1
+          fi
+
+      - name: Install pg
+        run: npm install pg --no-save --no-audit --no-fund
+
+      - name: Delete
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          node scripts/delete-articles.mjs \
+            ${{ inputs.slugs && format('--slugs "{0}"', inputs.slugs) || '' }} \
+            ${{ inputs.file && format('--file "{0}"', inputs.file) || '' }} \
+            ${{ inputs.language && format('--language "{0}"', inputs.language) || '' }} \
+            ${{ inputs.dry_run == true && '--dry-run' || '' }}
