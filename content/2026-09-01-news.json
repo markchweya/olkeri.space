@@ -1,0 +1,130 @@
+[
+  {
+    "slug": "pentagon-adds-chatgpt-and-grok-to-its-genai-mil-portal",
+    "language": "en",
+    "title": "Pentagon adds ChatGPT and Grok to its GenAI.mil portal",
+    "summary": "OpenAI's ChatGPT Mil and Starshield's Grok for Government joined Google's Gemini on the defence department's AI portal — while the one lab that demanded usage red lines is being removed by month's end.",
+    "category": "policy",
+    "region": "americas",
+    "tags": [
+      "pentagon",
+      "genai.mil",
+      "military ai",
+      "defence software"
+    ],
+    "author": "Olkeri.space",
+    "content": "The US Department of Defense has rolled out OpenAI's ChatGPT Mil and Grok for Government, supplied through SpaceX's Starshield, across the military via GenAI.mil, its portal for commercial AI tools, according to reporting by DefenseScoop and TechCrunch. The platform launched last December with Google's Gemini for Government alone and has since drawn more than 1.7 million users; ChatGPT Mil is described as built to scale to more than three million personnel.\n\nThe department frames the tools' remit as sensitive but unclassified work: planning, policy, logistics and administration for ChatGPT Mil, and tasks from acquisition market research to supply-chain management for Grok. That framing deserves attention, because unclassified is not the same as unimportant. The connective tissue of a military — who is moving what where, which units are short of which parts — is exactly the material that aggregates into intelligence, and it now flows through commercial frontier models operated under government-specific terms.\n\nWhat the portal has quietly become is a scoreboard of who accepted those terms. Three frontier labs are now in. The one conspicuously out is Anthropic, which the department is removing from its systems by the end of September, after Defense Secretary Pete Hegseth designated the company a supply-chain risk in March. The dispute was over two red lines Anthropic wanted made explicit: no mass surveillance of Americans and no fully autonomous weapons. Anthropic went to court, and a federal judge blocked the designation earlier this year, but reporting indicates the removal effort has continued through the litigation, with some military users described as dragging their feet.\n\nThe commercial stakes make the policy question sharper, not softer. A three-million-seat deployment is the kind of contract that shapes a market, which means the terms of entry — what a lab must accept about how its models are used — are being set by the buyer with the least tolerance for conditions. Every frontier lab watching has now learned the price of asking."
+  },
+  {
+    "slug": "john-ternus-takes-over-as-apple-s-chief-executive",
+    "language": "en",
+    "title": "John Ternus takes over as Apple's chief executive",
+    "summary": "Tim Cook stepped down after fifteen years, handing Apple to its hardware engineering chief with AI named as the priority — a succession that trades an operator for a builder at an awkward moment.",
+    "category": "business",
+    "region": "americas",
+    "tags": [
+      "apple",
+      "john ternus",
+      "leadership succession",
+      "consumer hardware"
+    ],
+    "author": "Olkeri.space",
+    "content": "John Ternus became Apple's chief executive on 1 September, with Tim Cook moving to executive chairman of the board after fifteen years running the company. The transition, announced in April and unanimously approved by the board, follows what Apple described as a long-term succession process. Ternus, who joined the product design team in 2001 and has led hardware engineering since 2021, also joins the board; Cook is expected to keep engaging with policymakers in his new role.\n\nSuccessions describe what a board believes the next decade requires. Cook's appointment in 2011 put an operations specialist in charge, and the supply chain, the services business and years of steady execution became his era's signature. Choosing the head of hardware engineering says the board sees the coming decade as a product problem.\n\nThe complication is that the industry's centre of gravity has moved to a layer Apple does not lead. Bloomberg's framing of the handover — a new chief focused on AI — names the tension without resolving it. Apple's strength is distribution: the devices people already own and trust. The current cycle's strength is server-side intelligence, where Apple has so far been a buyer and integrator more than a leader. A hardware chief executive does not change that directly.\n\nWhat he plausibly changes is silicon. The one AI asset Apple indisputably owns is its chip line, and the case for a hardware-led era is that efficient on-device inference — models that run privately, on battery, without a data centre — plays to the company Ternus helped build rather than the one it is compared against.\n\nCook's retained portfolio is also worth noting. Keeping the policy relationships with the chairman rather than the chief executive acknowledges how much of Apple's exposure — tariffs, app-store regulation, China — is now political rather than technical.\n\nThe measure of the transition will not be the first keynote. It will be whether Apple's next AI moves look like a company shipping its own answer or renting someone else's."
+  },
+  {
+    "slug": "alibaba-ships-a-preview-of-the-qwen4-architecture",
+    "language": "en",
+    "title": "Alibaba ships a preview of the Qwen4 architecture",
+    "summary": "Qwen3.8-Flash-Next is an open-weight mixture-of-experts model — 125 billion parameters, around six billion active — released early so the tooling ecosystem is ready before the Qwen4 family arrives.",
+    "category": "research",
+    "region": "asia",
+    "tags": [
+      "alibaba",
+      "qwen",
+      "open models",
+      "mixture of experts"
+    ],
+    "author": "Olkeri.space",
+    "content": "Alibaba's Qwen team has released Qwen3.8-Flash-Next, an open-weight model it describes as an early preview of the architecture behind its coming Qwen4 family, according to TechNode and the team's own announcement. The model is a mixture-of-experts design reported at 125 billion total parameters with roughly six billion active per token, available on Hugging Face and ModelScope.\n\nThe sparsity ratio is the technical headline. Activating around five percent of parameters per token separates two quantities that used to move together: what a model knows, which scales with total parameters, and what it costs to run, which scales with active ones. A 125-billion-parameter model that serves like a small one is the entire economic argument for the current generation of open Chinese models, and each release pushes the ratio further.\n\nThe release strategy is the more interesting signal. Shipping an architecture before the flagship that uses it treats the open ecosystem as infrastructure to be prepared rather than an audience to be impressed. Open-weight adoption now depends less on benchmark position than on whether the surrounding tooling — inference engines, quantisation pipelines, fine-tuning frameworks — supports a model's architecture on day one. New attention mechanisms and routing schemes have historically taken months to land in the popular serving stacks, and a flagship that arrives before its tooling spends its launch window being unusable at production quality. Releasing the skeleton early outsources that work to the community, on the community's own schedule.\n\nIt also quietly raises the cost of following. Every hour contributors spend making this architecture run well is an hour invested in Qwen4 specifically, not in open models generally.\n\nWhat the preview does not reveal is the thing that matters most: how good Qwen4 itself will be. Architecture previews describe intentions. The measure will be whether the full family, when it lands, justifies the runway being cleared for it."
+  },
+  {
+    "slug": "clay-s-valuation-reaches-7-billion-as-wellington-leads-new-round",
+    "language": "en",
+    "title": "Clay's valuation reaches $7bn as Wellington leads new round",
+    "summary": "The sales-automation company is reported to be raising at a $7 billion pre-money valuation — its third repricing in about thirteen months, and a window into how private AI markets now work.",
+    "category": "business",
+    "region": "americas",
+    "tags": [
+      "clay",
+      "sales software",
+      "private markets",
+      "wellington management"
+    ],
+    "author": "Olkeri.space",
+    "content": "Clay, whose software automates sales and marketing research, is raising a new round led by Wellington Management at a $7 billion pre-money valuation, according to Axios. The trajectory behind that number is the story: a $100 million Series C at $3.1 billion in August 2025, an employee tender at $5 billion in January, and now $7 billion — three prices in roughly thirteen months.\n\nReported revenue provides the denominator. Clay's 2025 revenue was reported at around $100 million annualised, up from about $31 million the year before. Against the new valuation that is a multiple near seventy times trailing revenue — though the honest caveat is that the trailing figure is almost certainly stale, and the multiple depends entirely on how fast it has moved in 2026.\n\nTwo things about the round are more instructive than the number. The first is the cadence. The tender-then-round rhythm — a liquidity event for employees, then a primary raise months later at a higher mark — has become the standard machinery of late-stage AI companies, substituting for the public listing that once provided both. Each event validates the next price. It works beautifully while prices rise, and it has no reverse gear.\n\nThe second is the lead. Wellington is a crossover investor whose presence in a private round conventionally signals positioning for a public one. Whether or not a listing is near, this price was set by an institution that will eventually have to defend the mark against public-market comparables rather than venture logic.\n\nThe category matters too. Sales tooling is one of the few applied-AI segments where the return case is straightforwardly measurable — pipeline generated, meetings booked — which is why it reprices faster than segments still arguing about productivity. The bet at $7 billion is not that AI works for sales research; that is established. It is that Clay, specifically, remains the winner while every incumbent CRM builds the same features into software its customers already own."
+  },
+  {
+    "slug": "schools-open-the-year-with-graded-rules-for-ai",
+    "language": "en",
+    "title": "Schools open the year with graded rules for AI",
+    "summary": "Districts are converging on tiered access — no open chatbots for young children, supervised use in middle school, authorised use above — while most students already use the tools at home.",
+    "category": "society",
+    "region": "americas",
+    "tags": [
+      "education",
+      "classroom policy",
+      "students",
+      "school districts"
+    ],
+    "author": "Olkeri.space",
+    "content": "As the American school year opens, districts are converging on a common shape for AI rules: access graded by age. Katy Independent School District in Texas bars students up to sixth grade from open-ended chatbots such as Gemini and Copilot, allowing only curriculum-embedded tools; seventh graders get district-approved tools under supervision; high schoolers may use generative AI for specific purposes with teacher authorisation. Vermont's state framework follows the same curve, from no chatbots before third grade to broad AI fluency work in high school, and Illinois issued state guidance for districts in July.\n\nThe pattern is recognisable — it is how schools eventually handled calculators and internet access — but compressed from a decade of argument into about two years. The tiering embodies a defensible theory: that the risk of an open-ended assistant is inversely proportional to a student's ability to evaluate what it tells them, and that the skill of using one well is worth teaching before adulthood.\n\nThe numbers explain the urgency and the futility in equal measure. Surveys cited in coverage of the new policies report that 86 percent of nine-to-seventeen-year-olds have used generative AI, about a quarter of them daily, and that 85 percent of young users apply it to schoolwork. The tool arrived before the rules, and the rules govern school accounts and school networks — not the phone at the kitchen table where most of the schoolwork use actually happens. A district policy can shape what school-managed AI looks like; it cannot make eighth-grade essay writing AI-free, and policies written as if they could will be quietly ignored.\n\nThe gap that deserves more attention is on the other side of the desk. The share of teachers reporting no AI training at all has fallen from 60 percent in late 2024 to 42 percent — meaning that two school years into the era, four in ten teachers are still expected to referee a technology nobody has shown them how to use."
+  },
+  {
+    "slug": "anthropic-s-connector-protocol-passes-400-million-monthly-downloads",
+    "language": "en",
+    "title": "Anthropic's connector protocol passes 400 million monthly downloads",
+    "summary": "MCP's SDK downloads have roughly quadrupled in a year, and its latest specification rebuilds the core as stateless — the unglamorous change that says agents have moved from demos to deployments.",
+    "category": "research",
+    "region": "global",
+    "tags": [
+      "model context protocol",
+      "ai agents",
+      "open standards",
+      "developer tools"
+    ],
+    "author": "Olkeri.space",
+    "content": "The Model Context Protocol, Anthropic's open standard for connecting AI systems to tools and data, has passed 400 million monthly SDK downloads, according to reporting by 36Kr — roughly a fourfold increase in a year, from about 97 million in March. The milestone follows the protocol's largest specification revision, published in late July, which moves the core to a stateless architecture and adds standardised extensions aimed at enterprise deployment.\n\nDownload counts flatter every project that publishes them: they include CI systems and transitive installs, and they are not a count of users. But a fourfold move in a year is directional evidence of something protocols rarely achieve, which is escape velocity. Connector standards fail by default, because every platform prefers its own. MCP's unusual outcome is adoption across competing labs and vendors — the one property a connector standard actually needs.\n\nThe stateless-core change is the substantive news inside the boring number. A protocol whose sessions carry state is pleasant for demos and hostile to production: every long-lived connection pins a server, complicates failover and caps horizontal scale. Rebuilding around stateless operation is what a standard does when its users stop being hobbyists wiring up a laptop and start being enterprises running fleets. The revision describes, more credibly than any announcement could, where agent deployments actually are.\n\nThe governance question grows with the numbers. A protocol authored by one lab and adopted by an industry sits in an odd position: the value accrues to everyone, but the pen stays in one hand. Web standards resolved this with consortia; container standards with foundations. If MCP's trajectory continues, pressure for a neutral home for the specification will follow it — not because the current stewardship has misbehaved, but because infrastructure this widely depended on eventually gets asked to prove it belongs to no one."
+  },
+  {
+    "slug": "openai-s-trillion-dollar-listing-drifts-toward-2027",
+    "language": "en",
+    "title": "OpenAI's trillion-dollar listing drifts toward 2027",
+    "summary": "The company filed confidentially in June and is reported to target a valuation above $1 trillion, but its CFO now describes a 2027 debut — a delay that says more about the private market than the public one.",
+    "category": "business",
+    "region": "global",
+    "tags": [
+      "openai ipo",
+      "public markets",
+      "sec filing",
+      "revenue run rate"
+    ],
+    "author": "Olkeri.space",
+    "content": "OpenAI filed confidential IPO paperwork with US regulators in June and is reported to be targeting a valuation above $1 trillion, but the timeline has slipped: chief financial officer Sarah Friar has described the company becoming public in 2027, and Reuters reported in late June that a listing this year was no longer the plan.\n\nThe revenue trajectory explains why waiting is affordable. Reporting puts OpenAI's annualised run rate above $40 billion as of August, from roughly $20 billion at the end of 2025 and $25 billion early this year. A company compounding at that pace re-rates itself faster by staying private than by going public: every quarter of growth makes the trillion-dollar number look less like an aspiration and more like an arithmetic consequence. At $40 billion of run-rate revenue, $1 trillion is a multiple near twenty-five — aggressive by any historical software standard, yet conservative next to several private AI rounds priced this year at more than a hundred times revenue.\n\nWhat the delay actually reveals is that the private market has stopped imposing a deadline. The traditional reasons to list — capital access and employee liquidity — are both being met privately, through mega-rounds on one side and structured tenders on the other. A company that can raise tens of billions and let staff sell without a prospectus goes public only when it wants the currency or the discipline.\n\nThe unresolved question is what the eventual filing will force into daylight. A prospectus would put numbers on the things the AI economy currently argues about from leaks: gross margins net of compute, the durability of consumer subscriptions, concentration among enterprise customers, and the true cost of the capacity commitments OpenAI has signed. The valuation debate is, in the end, a debate about those figures. The longer the listing waits, the larger they grow — in both senses."
+  },
+  {
+    "slug": "samsung-and-sk-hynix-split-on-what-comes-after-hbm",
+    "language": "en",
+    "title": "Samsung and SK Hynix split on what comes after HBM",
+    "summary": "At Hot Chips, the memory leader showed cooler, taller HBM stacks while its challenger bet on processing-in-memory — two rational strategies pointed at the same wall.",
+    "category": "hardware",
+    "region": "asia",
+    "tags": [
+      "samsung",
+      "sk hynix",
+      "high bandwidth memory",
+      "hot chips"
+    ],
+    "author": "Olkeri.space",
+    "content": "The two Korean memory giants used the Hot Chips conference in late August to stake out diverging bets on AI memory's future. Samsung detailed its first commercial processing-in-memory product built on low-power DRAM, and is pushing more logic into the HBM base die; SK Hynix presented iHBM, a packaging approach it says cuts the thermal resistance of high-bandwidth memory stacks by more than 30 percent, according to reporting by the Korea JoongAng Daily and Digitimes.\n\nThe positions are rational given the standings. SK Hynix holds a majority of the HBM market by most estimates, and a leader defends the standard it dominates: its problems are the leader's problems — heat, and the difficulty of stacking DRAM dies ever taller without the middle layers cooking. A 30 percent cut in thermal resistance is not a glamorous claim, but thermals are the binding constraint on how tall stacks can go, and stack height is how HBM capacity grows.\n\nSamsung, chasing, bets on changing the game. Processing-in-memory attacks the underlying problem from the other side: instead of moving data to the compute ever faster, it moves some of the compute into the memory, so the data does not travel at all. The physics case is old and sound — data movement, not arithmetic, dominates the energy budget of AI workloads. The history is the caution: PIM has been the next big thing in memory for two decades, and it has repeatedly foundered on the same rock, which is that it requires software to change. Accelerator vendors and framework authors have to program for it, and they have historically declined.\n\nWhat is different now is the size of the prize and the pain of the status quo. When memory bandwidth is the ceiling on a hundred-billion-dollar accelerator market, the reward for breaking the wall rather than climbing it has never been higher. The next accelerator generation will show which bet the buyers made."
+  }
+]
