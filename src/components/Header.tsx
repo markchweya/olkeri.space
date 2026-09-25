@@ -37,6 +37,15 @@ export default function Header() {
             </Link>
           )}
 
+          {pathname !== '/work' && (
+            <Link
+              href="/work"
+              className="text-white hover:text-green-400 transition-colors duration-200"
+            >
+              {copy.navWork}
+            </Link>
+          )}
+
           {pathname !== `/${appLanguage}` && (
             <Link
               href={`/${appLanguage}`}

@@ -1,0 +1,130 @@
+[
+  {
+    "slug": "deepseek-nears-7-4-billion-raise-at-a-74-billion-valuation",
+    "language": "en",
+    "title": "DeepSeek nears $7.4bn raise at a $74bn valuation",
+    "summary": "The Chinese lab is reported to be closing a fresh round at roughly 500 billion yuan pre-money, ahead of a possible Shanghai listing — on revenue that reporting puts near $500 million.",
+    "category": "business",
+    "region": "asia",
+    "tags": [
+      "deepseek",
+      "china",
+      "venture funding",
+      "ipo"
+    ],
+    "author": "Olkeri.space",
+    "content": "DeepSeek is close to completing a funding round of about 50 billion yuan, or roughly $7.4 billion, at a pre-money valuation near 500 billion yuan — about $74 billion — according to sources cited by Reuters. The financing is expected to close by the end of August, ahead of a possible initial public offering on Shanghai's STAR Market, with a filing reported as early as the end of 2026 and a debut in 2027.\n\nExisting backers including Monolith, Shixiang Capital and the battery manufacturer CATL are reported to be participating, with CPE, Legend Capital and the semiconductor-focused Stony Creek Capital in talks to join.\n\nThe number worth sitting with is the ratio. Reporting puts DeepSeek's annualised revenue near $500 million against a $74 billion valuation — something close to 150 times revenue, for a company described as still in a cash-burning expansion phase. That multiple is not priced off current earnings. It is priced off the expectation that DeepSeek remains China's default frontier lab and that the domestic market it serves keeps growing.\n\nThe choice of venue matters as much as the number. An onshore listing raises capital that cannot be reached by US export restrictions or investment screening, from investors who are not exposed to the political risk of holding a Chinese AI company through American markets. For a lab whose binding constraint is access to compute rather than money, that independence has a value the balance sheet does not show.\n\nThe repricing is steep: from above $50 billion in June to $74 billion now, in roughly two months. Rounds that move this fast usually reflect the scarcity of the asset — there are few independent Chinese frontier labs an onshore investor can buy into — more than a change in the underlying business over a quarter.\n\nWhat would test the number is disclosure. An IPO prospectus would force out gross margins, compute costs and customer concentration: the three figures that would show whether $74 billion is an assessment or a placeholder."
+  },
+  {
+    "slug": "anthropic-says-infostealer-malware-is-draining-claude-accounts",
+    "language": "en",
+    "title": "Anthropic says infostealer malware is draining Claude accounts",
+    "summary": "Commodity malware on users' own machines is lifting authenticated Claude sessions and burning paid usage — a theft that sidesteps two-factor authentication entirely, because the stolen token proves the login already happened.",
+    "category": "society",
+    "region": "global",
+    "tags": [
+      "anthropic",
+      "infostealer",
+      "account security",
+      "session hijacking"
+    ],
+    "author": "Olkeri.space",
+    "content": "Anthropic has warned that attackers are using commodity infostealer malware to lift active Claude login sessions from users' own computers and replay them to consume paid usage, according to reporting by BleepingComputer. The company named Vidar, LummaC2, StealC, RedLine and Acreed on Windows, along with Atomic Stealer on a small number of Macs.\n\nThe mechanism is worth being precise about, because it determines which defences work. These tools do not steal passwords. They steal the session cookie issued after a successful login — a token asserting that authentication has already happened. Two-factor authentication and single sign-on are therefore not so much bypassed as rendered irrelevant: the attacker never reaches a login screen. Rotating a password does nothing to a session already minted.\n\nAnthropic says it has signed out affected sessions, removed stored payment methods to stop further unauthorised charges, and refunded confirmed fraudulent transactions. It has also stated the limitation plainly, which is to its credit: none of that removes malware from an infected machine, so a session created at the next login can be taken the same way.\n\nWhat is new here is not the technique, which is years old, but the target. Infostealers have historically monetised banking credentials, crypto wallets and gaming accounts. An AI subscription now joins that list, because metered compute is a fungible resource with a resale market — a hijacked account is a way to run your workload on someone else's bill. That places AI accounts in roughly the same risk class as cloud credentials, and very few consumers treat them that way.\n\nThe uncomfortable part for every provider is that the compromise happens outside their perimeter. A vendor can shorten session lifetimes, bind tokens to a device, or alert on implausible travel, and several of those would help. None of them fix an infected laptop, and the industry has no better answer to that today."
+  },
+  {
+    "slug": "eu-ai-office-sends-first-information-requests-to-model-providers",
+    "language": "en",
+    "title": "EU AI Office sends first information requests to model providers",
+    "summary": "Regulators asked general-purpose model providers to document security, external evaluations and post-market monitoring — the first concrete test of whether the AI Act's obligations can actually be audited.",
+    "category": "policy",
+    "region": "europe",
+    "tags": [
+      "eu ai act",
+      "ai office",
+      "general-purpose models",
+      "regulatory enforcement"
+    ],
+    "author": "Olkeri.space",
+    "content": "The EU AI Office sent formal requests for information to a number of general-purpose AI model providers on 29 August, covering model security, independent external evaluations and the monitoring of models once they are on the market. Recipients are reported to include OpenAI, Anthropic and Google. The requests come four weeks after the AI Act's obligations for general-purpose models became enforceable on 2 August, with penalties of up to 3% of global turnover.\n\nRequests for information are unglamorous and easy to underrate. They are also the point at which a regulation stops being a text and becomes a practice, because they force the first answer to the question that matters: can these obligations be checked at all?\n\nThe three subjects chosen are pointed. Model security, external evaluation and post-market monitoring are precisely the areas where providers make public claims that no outside party can currently verify. A lab can state that it ran adversarial testing, that independent evaluators had meaningful access, and that it watches for harms after release. Until a regulator asks for the underlying evidence, each of those is a description of intent.\n\nThe harder problem sits on the regulator's side. Judging whether an evaluation was genuinely independent, or whether a monitoring programme amounts to more than a support inbox, requires technical judgment that supervisory bodies have historically had to build slowly and expensively. A request for information is only as good as the capacity to read the answer sceptically.\n\nContext matters for reading the pace, too. The conformity assessment deadline for high-risk systems — employment, credit, law enforcement, healthcare — was pushed to December 2027 under the Digital Omnibus, so the enforcement now beginning covers the model layer rather than the applications where concrete harm mostly occurs.\n\nWhat to watch is whether anything follows these letters. Published findings, or a first penalty, would establish that the obligations bind. Prolonged silence would establish something as well."
+  },
+  {
+    "slug": "chatbots-resisted-state-propaganda-better-than-ai-search-summaries",
+    "language": "en",
+    "title": "Chatbots resisted state propaganda better than AI search summaries",
+    "summary": "An NPR experiment with NewsGuard found leading chatbots mostly rejected false narratives from Russia, China and Iran, while the AI summaries atop search results did worse — a gap that points at retrieval rather than model quality.",
+    "category": "research",
+    "region": "global",
+    "tags": [
+      "disinformation",
+      "ai search",
+      "newsguard",
+      "retrieval"
+    ],
+    "author": "Olkeri.space",
+    "content": "An experiment conducted by NPR with NewsGuard found that leading AI chatbots mostly pushed back against false narratives promoted by Russia, China and Iran, while the AI-generated summaries that now sit atop search results performed less well. The researchers built 30 questions from narratives that first surfaced between December 2025 and July 2026 and put them to chatbots including OpenAI's ChatGPT and Google's Gemini, alongside the largest search engines.\n\nOne example cited: after Russian shelling damaged a historic Ukrainian monastery in June, Kremlin-aligned outlets and accounts claimed that Ukraine had damaged the UNESCO site instead.\n\nThe result runs against the intuition that grounding an answer in live search should make it more reliable, and the reason it does is worth understanding. A chatbot answering from its trained parameters, with safety tuning applied to known influence operations, draws on a corpus in which the debunking is usually better represented than the claim. A search summary is constrained to synthesise the pages the ranker returned. If a coordinated campaign has succeeded in getting its outlets to rank for a narrow query — which is the entire point of the campaign — the summary does not evaluate those pages so much as compress them, handing the reader a laundered version in the search engine's own voice.\n\nRetrieval, in other words, becomes a liability when the retrievable corpus is the thing under attack. That inverts the usual assumption that grounding reduces fabrication, and it does so precisely where accuracy matters most: narrow, recent, contested events, where authoritative coverage is thin and adversaries have had time to fill the gap.\n\nThe practical implication is that the two systems need different defences. A model can be evaluated against known false narratives before release. A retrieval pipeline has to be defended continuously, because its inputs change daily and its adversaries are optimising against it — and a fluent summary is a poor place to discover that."
+  },
+  {
+    "slug": "texas-pauses-state-funding-for-flock-s-ai-camera-network",
+    "language": "en",
+    "title": "Texas pauses state funding for Flock's AI camera network",
+    "summary": "Governor Abbott ordered agencies to stop funding AI-powered licence plate readers as a Texas Tribune investigation landed — though most of the money behind the 3,200-camera network is federal.",
+    "category": "policy",
+    "region": "americas",
+    "tags": [
+      "surveillance",
+      "licence plate readers",
+      "flock safety",
+      "texas"
+    ],
+    "author": "Olkeri.space",
+    "content": "Texas Governor Greg Abbott ordered state agencies to pause funding for Flock Safety's licence plate reader cameras, his office confirmed on Friday, as the Texas Tribune published an investigation into the state's role in building the network. The Tribune reported that the Motor Vehicle Crime Prevention Authority has directed at least $30 million in grants to local police departments, helping install at least 3,200 Flock cameras since 2023.\n\nThe cameras read more than plates. They use image recognition to record vehicle make, model and colour along with distinguishing features such as bumper stickers and dents — which is what turns a plate reader into a system that can follow a specific vehicle whose plate it was never given.\n\nThe order's reach is narrower than it sounds. Abbott's spokesperson said most funding for the cameras comes from the federal government, so a state-level freeze leaves the existing network in place and much of its future funding untouched. What it withdraws is the state's endorsement, at a moment when Texas cities and counties have begun cancelling contracts of their own.\n\nThe detail that should carry the most weight is a criminal case rather than a policy argument. A Lufkin police officer faces 100 counts of misusing public information for allegedly using the local Flock network to surveil eleven people. That is not a breach, a leak or a vendor failure. It is an authorised user doing exactly what the system was built to do, aimed at targets of their own choosing.\n\nThis is the characteristic failure of surveillance infrastructure, and the one least often designed against. Debate concentrates on whether the data should be collected and who may hold it. The recurring harm comes from people who already hold legitimate access, under weak logging, weak audit and weak consequences. A funding pause does not touch that. Query-level auditing, retention limits and independent review of access logs would — and none of those is what has been paused."
+  },
+  {
+    "slug": "ai-data-centre-anger-is-becoming-an-electoral-problem",
+    "language": "en",
+    "title": "AI data centre anger is becoming an electoral problem",
+    "summary": "Polling puts opposition to a local AI data centre near 70%, and the objection has moved from abstract unease to the utility bill — a shift that makes it durable, and makes cost allocation the decisive question.",
+    "category": "society",
+    "region": "americas",
+    "tags": [
+      "data centres",
+      "electricity prices",
+      "public opinion",
+      "utility regulation"
+    ],
+    "author": "Olkeri.space",
+    "content": "Opposition to AI data centres in the United States is hardening into organised political activity, with roughly 70% of Americans saying they would object to one being built in their community, according to polling cited by CNBC. The leading concerns are strain on local power supply and higher monthly utility bills. The National Republican Senatorial Committee has reportedly described data centres as a 'sleeper issue' for the midterm cycle.\n\nThe shift worth noting is what the objection is now about. Earlier resistance to AI was diffuse: job displacement, misinformation, a general unease about pace. Anger about an electricity bill is none of those. It is specific, recurring, personally measurable and attributable to an identifiable local structure. Grievances with that shape survive news cycles in a way that abstract anxiety does not.\n\nThe numbers behind it need care. Reporting cites wholesale electricity in some areas near data centres costing as much as 267% more than five years ago — a maximum, not a typical figure — alongside research from the Dallas Fed estimating that AI data centres could raise generation costs 20% to 30% by 2028 relative to a world without them. Those are different claims about different quantities, and both are routinely flattened into 'data centres raised my bill'.\n\nUnderneath the politics sits a narrow regulatory question that will decide most of it: who pays for the network reinforcement a large new load requires. Socialise that cost across all ratepayers and every household subsidises the buildout. Assign it to the load that caused it and the economics of siting change substantially. Washington's Utilities and Transportation Commission is writing guidelines on exactly this point.\n\nThat is the fight worth following. Zoning battles and moratorium proposals draw far more attention, but the rate case is where the money actually moves."
+  },
+  {
+    "slug": "us-drafts-rule-to-close-china-s-remote-access-to-ai-chips",
+    "language": "en",
+    "title": "US drafts rule to close China's remote access to AI chips",
+    "summary": "Commerce is reported to be preparing controls on overseas data centres renting compute to Chinese firms — a gap that exists because export law regulates goods, while compute is sold as a service.",
+    "category": "policy",
+    "region": "global",
+    "tags": [
+      "export controls",
+      "cloud compute",
+      "bureau of industry and security",
+      "nvidia"
+    ],
+    "author": "Olkeri.space",
+    "content": "The US Commerce Department is drafting an export rule that would require overseas data centres to block Chinese firms from remotely accessing advanced American AI chips, according to reporting by The Information. A draft could be circulated to industry as early as September, and is reported to include know-your-customer obligations for cloud and data centre operators.\n\nThe gap being addressed is structural rather than accidental. Export controls regulate the movement of goods across borders. They attach to a chip leaving the country, and at that they work reasonably well. Compute, though, is not sold as a good — it is rented as a service, and a customer in Shenzhen renting capacity in Singapore has moved no controlled item anywhere. Chinese firms including ByteDance, Alibaba and Tencent have reportedly used capacity in third countries such as Thailand, Malaysia and Japan on exactly that basis.\n\nClosing it means regulating a transaction rather than a shipment, which is considerably harder to draft and much harder to enforce. It requires operators in other jurisdictions to establish the nationality of the entity behind an account, in an industry built on abstracting away who is renting what.\n\nThe immediate obstacle is authority. Export-control lawyers quoted in reporting on the proposal argue that the Bureau of Industry and Security has no statutory power to police remote access until Congress grants it. The Remote Access Security Act, which would supply that authority, passed the House 369-22 in January and has sat in the Senate Banking Committee since. A rule issued without that footing would be a standing invitation to litigate, and the firms with the resources to litigate are the ones it would bind.\n\nThe wider question is whether controls of this shape can work against a service at all. Each closed route has so far produced a new intermediary rather than an absence of access, and the enforcement burden lands on foreign operators with little reason to carry it."
+  },
+  {
+    "slug": "stanford-update-widens-the-ai-gap-for-entry-level-workers",
+    "language": "en",
+    "title": "Stanford update widens the AI gap for entry-level workers",
+    "summary": "The revised 'Canaries' paper puts employment for 22-to-25-year-olds in AI-exposed occupations about 19% below trend, up from 15% — and finds the loss runs through hiring that never happens rather than layoffs.",
+    "category": "research",
+    "region": "americas",
+    "tags": [
+      "labour market",
+      "entry-level jobs",
+      "stanford",
+      "employment data"
+    ],
+    "author": "Olkeri.space",
+    "content": "A revised version of the Stanford Digital Economy Lab's 'Canaries in the Coal Mine?' paper, published in August with a larger dataset, finds that employment among workers aged 22 to 25 in highly AI-exposed occupations is now roughly 19% below where it would be had it kept pace with similar-aged workers in less exposed occupations. A year ago the same measure stood at about 15%. The analysis draws on payroll data covering some 4.6 million workers across more than 730 occupations.\n\nTwo findings do more work than the headline number. The first is that the decline runs almost entirely through reduced hiring rather than increased separations. Nobody is laid off in this story. Positions that would have been opened are not opened, and the people affected are those who never got the job — a group that generates no severance filing, no redundancy notice and no identifiable victim. It is the least visible way a labour market can contract, and the hardest to legislate against.\n\nThe second is the split by experience. Within the same occupations, older workers show no comparable decline. The paper attributes this to the difference between codified knowledge, which a model can reproduce, and tacit knowledge built through judgment and accumulated cases. The distinction is plausible, and it carries an uncomfortable implication: tacit knowledge is acquired by doing junior work. If the junior rungs of software development, customer service and clerical work are being removed, the pipeline that produces the experienced workers currently insulated is being removed with them.\n\nCorrelation is doing real work here, and the authors are careful about it. AI exposure correlates with other things that moved over the same period, and no natural experiment separates them cleanly.\n\nBut the direction is the finding. The gap widened from 15% to 19% across a year in which the effect was widely expected to prove a measurement artefact. It has not behaved like one."
+  }
+]

@@ -72,6 +72,26 @@ html[data-theme="light"] .bg-green-400 {
   color: #05110b !important;
 }
 
+/*
+  Headlines are painted with a white-to-green gradient clipped to the text.
+  On the light background that reads as white-on-white: the hero heading of
+  every page was effectively invisible to anyone whose system prefers light
+  mode. Repaint the gradient dark-to-green so the same headings stay legible.
+*/
+html[data-theme="light"] .bg-clip-text {
+  background-image: linear-gradient(to right, #101610, #00814f) !important;
+}
+
+/*
+  The greens chosen to glow on black are too pale to read on the light
+  background — the selected filter chip (pale green on a pale green fill) was
+  the worst of them. Darken the green text tokens in light mode only.
+*/
+html[data-theme="light"] [class*="text-green-200"],
+html[data-theme="light"] [class*="text-green-300"] {
+  color: #00663f !important;
+}
+
 html[data-theme="light"] [aria-label="Accessibility controls"] {
   background-color: rgba(255, 255, 255, 0.86) !important;
   border-color: rgba(16, 22, 16, 0.12) !important;
