@@ -56,6 +56,7 @@ export default function WorkGrid() {
           <ProjectCard
             key={project.slug}
             project={project}
+            language={appLanguage}
             labels={{
               privateLabel: copy.privateLabel,
               viewCode: copy.viewCode,

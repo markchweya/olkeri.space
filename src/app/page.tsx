@@ -91,6 +91,7 @@ export default async function Home() {
               <ProjectCard
                 key={project.slug}
                 project={project}
+                language="en"
                 labels={{
                   privateLabel: copy.studio.privateLabel,
                   viewCode: copy.studio.viewCode,

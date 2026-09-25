@@ -1,3 +1,4 @@
+import type { ArticleLanguage } from '@/lib/articles'
 import type { Project } from '@/lib/projects'
 
 type Labels = {
@@ -8,9 +9,11 @@ type Labels = {
 
 export default function ProjectCard({
   project,
+  language,
   labels,
 }: {
   project: Project
+  language: ArticleLanguage
   labels: Labels
 }) {
   return (
@@ -24,7 +27,7 @@ export default function ProjectCard({
         </span>
       </div>
 
-      <p className="mt-4 flex-1 text-sm leading-6 text-white/65">{project.blurb}</p>
+      <p className="mt-4 flex-1 text-sm leading-6 text-white/65">{project.blurb[language]}</p>
 
       <ul className="mt-5 flex flex-wrap gap-2">
         {project.stack.map(item => (
