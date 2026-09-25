@@ -58,3 +58,27 @@ alter table articles add column if not exists author text;
 alter table articles drop constraint if exists articles_language_check;
 alter table articles add constraint articles_language_check
   check (language in ('en', 'fr', 'de', 'es'));
+
+-- Project enquiries and newsroom tips submitted through /contact.
+-- Added when the site took on portfolio and studio duties: the form used to
+-- render a button that discarded whatever a visitor typed.
+create table if not exists contact_messages (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  email text not null,
+  message text not null,
+  -- Free-form, set by the form; useful for routing a project brief away
+  -- from a story tip without reading every row.
+  topic text,
+  source_language text,
+  user_agent text,
+  created_at timestamptz not null default now(),
+  handled_at timestamptz
+);
+
+create index if not exists contact_messages_created_idx
+  on contact_messages (created_at desc);
+
+create index if not exists contact_messages_unhandled_idx
+  on contact_messages (created_at desc)
+  where handled_at is null;
